@@ -1,0 +1,27 @@
+﻿<Window x:Class="Khai_thác_Udemy_free.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Khai_thác_Udemy_free"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <!--Phân cách-->
+        <TextBox x:Name="tbPath"></TextBox>
+        <Button Grid.Column="1" x:Name="btGetPath">Lấy địa chỉ trình duyệt</Button>
+        <Button Grid.ColumnSpan="2" Grid.Row="1" x:Name="btSignIn">Đăng nhập</Button>
+        <Button Grid.Row="2" Grid.ColumnSpan="2" x:Name="btRun">Thực thi</Button>
+        <TextBox Grid.ColumnSpan="2" Grid.Row="3" x:Name="tbRes"></TextBox>
+    </Grid>
+</Window>
