@@ -24,6 +24,6 @@
         <Button Grid.ColumnSpan="2" Grid.Row="1" x:Name="btSignIn" Click="btSignIn_Click">Đăng nhập</Button>
         <Button Grid.Row="3" Grid.ColumnSpan="2" x:Name="btRun" Click="btRun_Click">Thực thi</Button>
         <CheckBox Grid.Row="2">Sau khi check xong cho vào tài khoản</CheckBox>
-        <TextBox Grid.ColumnSpan="2" Grid.Row="4" x:Name="tbRes"></TextBox>
+        <TextBox Grid.ColumnSpan="2" Grid.Row="4" x:Name="tbRes" VerticalScrollBarVisibility="Visible"></TextBox>
     </Grid>
 </Window>
