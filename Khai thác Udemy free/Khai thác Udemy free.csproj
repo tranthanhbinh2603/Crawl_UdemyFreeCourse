@@ -82,6 +82,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="xNet">
+      <HintPath>C:\dllInstall\xNet.dll</HintPath>
+    </Reference>
     <Reference Include="xNetStandart">
       <HintPath>..\..\..\..\..\Download\Compressed\xNetStandart\xNetStandart.dll</HintPath>
     </Reference>
