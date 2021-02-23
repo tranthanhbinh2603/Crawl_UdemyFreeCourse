@@ -40,7 +40,7 @@ namespace Khai_thác_Udemy_free
             }
             if ((a == list1.Count) && (list1.Count == list2.Count))
             {
-                return false; 
+                return false; //Nếu trùng thì trả false
             }
             else
             {
@@ -56,51 +56,53 @@ namespace Khai_thác_Udemy_free
         }
 
         #region Các hàm chuyên dùng để kiểm tra xem trang có tồn tại không
-        void Check_web_in_realdiscount(int n, ref bool res, ref string html) //Hàm dùng để check link https://www.real.discount/ có sống không, đồng thời trả về chuỗi html - Đã hoàn thành
+        
+        bool Check_web_in_realdiscount(int n) //Hàm dùng để check link https://www.real.discount/ có sống không, không trả về chuỗi html - Đã hoàn thành
         {
-            HttpRequest http = new HttpRequest();
             try
             {
-                html = http.Get("https://www.real.discount/product-tag/100-off/page/" + n + "/?filter_platform=udemy&count=36").ToString();
-                res = true;
+                HttpRequest http = new HttpRequest();
+                try
+                {
+                    http.Get("https://www.real.discount/product-tag/100-off/page/" + n + "/?filter_platform=udemy&count=36").ToString();
+                    return true;
+                }
+                catch (xNetStandart.HttpException)
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return Check_web_in_realdiscount(n);
+            }
+            
+        }
+
+        bool Check_web_in_couponscorpion(int n)
+        {
+            try
+            {
+                HttpRequest http = new HttpRequest();
+                string html = http.Get("https://couponscorpion.com/page/" + n).ToString();
+                Regex reg = new Regex(@"<article class=""col_item.*?</article>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                if (reg.Matches(html).Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch (xNetStandart.HttpException)
             {
-                html = "";
-                res = false;
+                return Check_web_in_couponscorpion(n);
             }
+            
         }
 
-        void Check_web_in_realdiscount(int n, ref bool res) //Hàm dùng để check link https://www.real.discount/ có sống không, không trả về chuỗi html - Đã hoàn thành
-        {
-            HttpRequest http = new HttpRequest();
-            try
-            {
-                http.Get("https://www.real.discount/product-tag/100-off/page/" + n + "/?filter_platform=udemy&count=36").ToString();
-                res = true;
-            }
-            catch (xNetStandart.HttpException)
-            {
-                res = false;
-            }
-        }
-
-        void Check_web_in_couponscorpion(int n, ref bool res)
-        {
-            HttpRequest http = new HttpRequest();
-            string html = http.Get("https://couponscorpion.com/page/" + n).ToString();
-            Regex reg = new Regex(@"<article class=""col_item.*?</article>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            if (reg.Matches(html).Count > 0)
-            {
-                res = true;
-            }
-            else
-            {
-                res = false;
-            }
-        }
-
-        void Check_web_in_udemyfreebies(int n, ref bool res)
+        bool Check_web_in_udemyfreebies(int n)
         {
             try
             {
@@ -142,18 +144,87 @@ namespace Khai_thác_Udemy_free
 
                 if (Equal_List(list_link_1, list_link_2))
                 {
-                    res = true;
+                    return true;
                 }
                 else
                 {
-                    res = false;
+                    return false;
                 }
             }
             catch (xNetStandart.HttpException)
             {
-                Check_web_in_udemyfreebies(n, ref res);
+                return Check_web_in_udemyfreebies(n);
             }           
 
+        }
+
+        bool Check_web_in_discudemy(int n)
+        {
+            try
+            {
+                List<string> list_link_in_discudemy_1 = new List<string>();
+                HttpRequest http = new HttpRequest();
+                string html = http.Get("https://www.discudemy.com/all/" + n).ToString();
+
+                Regex reg = new Regex(@"<section class=""card"">(?<Card>.*?)</section>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
+                {
+                    foreach (Capture i in item.Groups["Card"].Captures)
+                    {
+                        Regex reg1 = new Regex(@"<a class=""card-header"" href=""(?<Link>https://www.discudemy.com.*?)"">", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                        foreach (Match item1 in reg1.Matches(i.ToString()))
+                        {
+                            foreach (Capture i1 in item1.Groups["Link"].Captures)
+                            {
+                                string str1 = "https://www.discudemy.com/giveaway";
+                                if (i1.ToString().Contains(str1) == false)
+                                {
+                                    list_link_in_discudemy_1.Add(i1.ToString());
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+
+
+                List<string> list_link_in_discudemy_2 = new List<string>();
+                HttpRequest http1 = new HttpRequest();
+                string html1 = http.Get("https://www.discudemy.com/all/" + (n + 1)).ToString();
+                
+                foreach (Match item in reg.Matches(html1))
+                {
+                    foreach (Capture i in item.Groups["Card"].Captures)
+                    {
+                        Regex reg1 = new Regex(@"<a class=""card-header"" href=""(?<Link>https://www.discudemy.com.*?)"">", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                        foreach (Match item1 in reg1.Matches(i.ToString()))
+                        {
+                            foreach (Capture i1 in item1.Groups["Link"].Captures)
+                            {
+                                string str1 = "https://www.discudemy.com/giveaway";
+                                if (i1.ToString().Contains(str1) == false)
+                                {
+                                    list_link_in_discudemy_2.Add(i1.ToString());
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                if (Equal_List(list_link_in_discudemy_1, list_link_in_discudemy_2))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (xNetStandart.HttpException)
+            {
+                return Check_web_in_discudemy(n);
+            }
         }
         #endregion
 
@@ -184,7 +255,7 @@ namespace Khai_thác_Udemy_free
             foreach (var item in tang_kiem_tra)
             {
                 bool is_enable = true;
-                Check_web_in_realdiscount(item, ref is_enable);
+                is_enable = Check_web_in_realdiscount(item);
                 if (is_enable == false)
                 {
                     Gioi_han = item;
@@ -212,7 +283,7 @@ namespace Khai_thác_Udemy_free
                     for (int i = tang_kiem_tra[chi_so_gioi_han - 2] + 1; i <= Gioi_han - 1; i++)
                     {
                         bool is_enable = true;
-                        Check_web_in_realdiscount(i, ref is_enable);
+                        is_enable = Check_web_in_realdiscount(i);
                         if (is_enable == false)
                         {
                             a = --i;
@@ -226,7 +297,7 @@ namespace Khai_thác_Udemy_free
                 for (int i = 1; i <= Gioi_han - 1; i++)
                 {
                     bool is_enable = true;
-                    Check_web_in_realdiscount(i, ref is_enable);
+                    is_enable = Check_web_in_realdiscount(i);
                     if (is_enable == false)
                     {
                         a = --i;
@@ -264,7 +335,7 @@ namespace Khai_thác_Udemy_free
             foreach (var item in tang_kiem_tra)
             {
                 bool is_enable = true;
-                Check_web_in_couponscorpion(item, ref is_enable);
+                is_enable = Check_web_in_couponscorpion(item);
                 if (is_enable == false)
                 {
                     Gioi_han = item;
@@ -292,7 +363,7 @@ namespace Khai_thác_Udemy_free
                     for (int i = tang_kiem_tra[chi_so_gioi_han - 2] + 1; i <= Gioi_han - 1; i++)
                     {
                         bool is_enable = true;
-                        Check_web_in_couponscorpion(i, ref is_enable);
+                        is_enable = Check_web_in_couponscorpion(i);
                         if (is_enable == false)
                         {
                             a = --i;
@@ -306,7 +377,7 @@ namespace Khai_thác_Udemy_free
                 for (int i = 1; i <= Gioi_han - 1; i++)
                 {
                     bool is_enable = true;
-                    Check_web_in_couponscorpion(i, ref is_enable);
+                    is_enable = Check_web_in_couponscorpion(i);
                     if (is_enable == false)
                     {
                         a = --i;
@@ -318,7 +389,7 @@ namespace Khai_thác_Udemy_free
 
         }
 
-        void Count_in_onlinecourses(ref int a, int max) //https://www.onlinecourses.ooo/ - Đã hoàn thành
+        void Count_in_onlinecourses(ref int a) //https://www.onlinecourses.ooo/ - Đã hoàn thành
         {
             HttpRequest http = new HttpRequest();
             string html = http.Get("https://www.onlinecourses.ooo/").ToString();
@@ -337,7 +408,7 @@ namespace Khai_thác_Udemy_free
             a = sotrang;
         }
 
-        void Count_in_udemyfreebies(ref int a, int max)
+        void Count_in_udemyfreebies(ref int a, int max) //https://www.udemyfreebies.com/ - Đã hoàn thành
         {
             List<int> tang_kiem_tra = new List<int>();
 
@@ -363,7 +434,7 @@ namespace Khai_thác_Udemy_free
             foreach (var item in tang_kiem_tra)
             {
                 bool is_enable = true;
-                Check_web_in_udemyfreebies(item, ref is_enable);
+                is_enable = Check_web_in_udemyfreebies(item);
                 if (is_enable == false)
                 {
                     Gioi_han = item;
@@ -391,7 +462,7 @@ namespace Khai_thác_Udemy_free
                     for (int i = tang_kiem_tra[chi_so_gioi_han - 2] + 1; i <= Gioi_han - 1; i++)
                     {
                         bool is_enable = true;
-                        Check_web_in_udemyfreebies(i, ref is_enable);
+                        is_enable = Check_web_in_udemyfreebies(i);
                         if (is_enable == false)
                         {
                             a = --i;
@@ -405,7 +476,7 @@ namespace Khai_thác_Udemy_free
                 for (int i = 1; i <= Gioi_han - 1; i++)
                 {
                     bool is_enable = true;
-                    Check_web_in_udemyfreebies(i, ref is_enable);
+                    is_enable = Check_web_in_udemyfreebies(i);
                     if (is_enable == false)
                     {
                         a = --i;
@@ -414,7 +485,22 @@ namespace Khai_thác_Udemy_free
                 }
             }
         }
-        #endregion
+
+        void Count_in_teachinguide(ref int a)
+        {
+            HttpRequest http = new HttpRequest();
+            string html = http.Get("https://teachinguide.azure-api.net/course-coupon?sortCol=featured&sortDir=DESC&length=12&page=1&inkw=&discount=100&language=&").ToString();
+
+            Regex reg = new Regex(@"""pages"": (?<Count_page>\w+),", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+            foreach (Match item in reg.Matches(html))
+            {
+                foreach (Capture i in item.Groups["Count_page"].Captures)
+                {
+                    a = int.Parse(i.ToString());
+                }
+            }
+        }
+    #endregion
 
         #region Hàm cần dùng
         bool Check_Udemy_Course_is_free(string Link) //Đã hoàn thiện
@@ -571,7 +657,7 @@ namespace Khai_thác_Udemy_free
                 tbRes.Dispatcher.Invoke(() => tbRes.Text += "Đang thực hiện crawler trang " + x + " ở trang Link.Discount!\n");
                 Thread.Sleep(20);
                 tbRes.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
-                Check_web_in_realdiscount(x, ref Next, ref html);
+                //Check_web_in_realdiscount(x, ref Next, ref html);
                 if (Next)
                 {
                     Regex reg = new Regex(@"www.udemy.com.*?\""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
@@ -845,11 +931,15 @@ namespace Khai_thác_Udemy_free
         private void btRun_Click(object sender, RoutedEventArgs e)
         {
             int sotrang = 0;
-            int max = 2000;
+            bool kq = true;
+            //int max = 2000;
             Thread thr = new Thread(() =>
             {
-                Count_in_udemyfreebies(ref sotrang, max);
-                tbRes.Dispatcher.Invoke(() => tbRes.Text += sotrang);
+                //Count_in_teachinguide(ref sotrang);
+                //tbRes.Dispatcher.Invoke(() => tbRes.Text += sotrang);
+
+                kq = Check_web_in_discudemy(10000);
+                tbRes.Dispatcher.Invoke(() => tbRes.Text += kq);
             });
             thr.Start();
             
