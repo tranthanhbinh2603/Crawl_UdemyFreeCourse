@@ -164,6 +164,7 @@ namespace Khai_thác_Udemy_free
             {
                 List<string> list_link_in_discudemy_1 = new List<string>();
                 HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = 2000;
                 string html = http.Get("https://www.discudemy.com/all/" + n).ToString();
 
                 Regex reg = new Regex(@"<section class=""card"">(?<Card>.*?)</section>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
@@ -190,6 +191,7 @@ namespace Khai_thác_Udemy_free
 
                 List<string> list_link_in_discudemy_2 = new List<string>();
                 HttpRequest http1 = new HttpRequest();
+                http.ConnectTimeout = 2000;
                 string html1 = http.Get("https://www.discudemy.com/all/" + (n + 1)).ToString();
                 
                 foreach (Match item in reg.Matches(html1))
@@ -497,6 +499,84 @@ namespace Khai_thác_Udemy_free
                 foreach (Capture i in item.Groups["Count_page"].Captures)
                 {
                     a = int.Parse(i.ToString());
+                }
+            }
+        }
+
+        void Count_in_discudemy(ref int a, int max)
+        {
+            List<int> tang_kiem_tra = new List<int>();
+
+            int n = 0;
+            int t = 0;
+            while (t < max)
+            {
+                n = n + 1;
+                t = t + n;
+            }
+
+            tang_kiem_tra.Add(n);
+            for (int i = 1; i < n; i++)
+            {
+                int za = n - i;
+                tang_kiem_tra.Add(tang_kiem_tra[i - 1] + za);
+            }
+
+            int ai = 1;
+            int Gioi_han = 0;
+            int chi_so_gioi_han = 0;
+
+            foreach (var item in tang_kiem_tra)
+            {
+                bool is_enable = true;
+                is_enable = Check_web_in_discudemy(item);
+                if (is_enable == false)
+                {
+                    Gioi_han = item;
+                    chi_so_gioi_han = ai;
+                    break;
+                }
+                else
+                {
+                    Gioi_han = tang_kiem_tra[ai - 1];
+                    chi_so_gioi_han = ai;
+                    ai++;
+                }
+
+            }
+
+            if (chi_so_gioi_han - 2 != -1)
+            {
+                if (tang_kiem_tra[chi_so_gioi_han - 2] + 1 > Gioi_han - 1)
+                {
+                    a = tang_kiem_tra[chi_so_gioi_han - 2] + 1;
+                    return;
+                }
+                else
+                {
+                    for (int i = tang_kiem_tra[chi_so_gioi_han - 2] + 1; i <= Gioi_han - 1; i++)
+                    {
+                        bool is_enable = true;
+                        is_enable = Check_web_in_discudemy(i);
+                        if (is_enable == false)
+                        {
+                            a = --i;
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 1; i <= Gioi_han - 1; i++)
+                {
+                    bool is_enable = true;
+                    is_enable = Check_web_in_discudemy(i);
+                    if (is_enable == false)
+                    {
+                        a = i;
+                        break;
+                    }
                 }
             }
         }
@@ -931,15 +1011,13 @@ namespace Khai_thác_Udemy_free
         private void btRun_Click(object sender, RoutedEventArgs e)
         {
             int sotrang = 0;
-            bool kq = true;
-            //int max = 2000;
+            int max = 600;
             Thread thr = new Thread(() =>
             {
-                //Count_in_teachinguide(ref sotrang);
-                //tbRes.Dispatcher.Invoke(() => tbRes.Text += sotrang);
+                Count_in_discudemy(ref sotrang, max);
+                tbRes.Dispatcher.Invoke(() => tbRes.Text += sotrang);
 
-                kq = Check_web_in_discudemy(10000);
-                tbRes.Dispatcher.Invoke(() => tbRes.Text += kq);
+
             });
             thr.Start();
             
