@@ -55,7 +55,7 @@ namespace Khai_thác_Udemy_free
             InitializeComponent();
         }
 
-        #region Các hàm chuyên dùng đếm số trang 
+        #region Các hàm chuyên dùng đếm số trang - Đã thành công 
         int Count_in_realdiscount() //https://www.real.discount/ - Hàm này OK
         {
             try
@@ -196,84 +196,65 @@ namespace Khai_thác_Udemy_free
             }
         }
 
-        void Count_in_discudemy(ref int a, int max)
+        int Count_in_discudemy() // https://www.discudemy.com/all - Đã hoàn thành
         {
-            List<int> tang_kiem_tra = new List<int>();
-
-            int n = 0;
-            int t = 0;
-            while (t < max)
+            try
             {
-                n = n + 1;
-                t = t + n;
-            }
+                HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = 1600;
+                string html = http.Get("https://www.discudemy.com/all").ToString();
+                int res = 0;
 
-            tang_kiem_tra.Add(n);
-            for (int i = 1; i < n; i++)
-            {
-                int za = n - i;
-                tang_kiem_tra.Add(tang_kiem_tra[i - 1] + za);
-            }
-
-            int ai = 1;
-            int Gioi_han = 0;
-            int chi_so_gioi_han = 0;
-
-            foreach (var item in tang_kiem_tra)
-            {
-                bool is_enable = true;
-                is_enable = Check_web_in_discudemy(item);
-                if (is_enable == false)
+                Regex reg = new Regex(@"<li><a href="".*?"" >(?<Link>.*?)</a></li>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
                 {
-                    Gioi_han = item;
-                    chi_so_gioi_han = ai;
-                    break;
-                }
-                else
-                {
-                    Gioi_han = tang_kiem_tra[ai - 1];
-                    chi_so_gioi_han = ai;
-                    ai++;
-                }
-
-            }
-
-            if (chi_so_gioi_han - 2 != -1)
-            {
-                if (tang_kiem_tra[chi_so_gioi_han - 2] + 1 > Gioi_han - 1)
-                {
-                    a = tang_kiem_tra[chi_so_gioi_han - 2] + 1;
-                    return;
-                }
-                else
-                {
-                    for (int i = tang_kiem_tra[chi_so_gioi_han - 2] + 1; i <= Gioi_han - 1; i++)
+                    foreach (Capture i in item.Groups["Link"].Captures)
                     {
-                        bool is_enable = true;
-                        is_enable = Check_web_in_discudemy(i);
-                        if (is_enable == false)
+                        if ((i.ToString() != "...") && (i.ToString() != "»"))
                         {
-                            a = --i;
-                            break;
+                            res = int.Parse(i.ToString());
                         }
                     }
                 }
+                tbRes.Dispatcher.Invoke(() => tbRes.Text = res.ToString());
+                return res;
             }
-            else
+            catch (xNetStandart.HttpException)
             {
-                for (int i = 1; i <= Gioi_han - 1; i++)
+                return Count_in_discudemy();
+            }
+            
+        }
+
+        int Count_in_freebiesglobal() //https://freebiesglobal.com/dealstore/udemy - Đã hoàn thành
+        {
+            try
+            {
+                HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = 3000;
+                string html = http.Get("https://freebiesglobal.com/dealstore/udemy").ToString();
+                int res = 0;
+
+                Regex reg = new Regex(@"<li><a href="".*?"">(?<Link>.*?)</a></li>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
                 {
-                    bool is_enable = true;
-                    is_enable = Check_web_in_discudemy(i);
-                    if (is_enable == false)
+                    foreach (Capture i in item.Groups["Link"].Captures)
                     {
-                        a = i;
-                        break;
+                        if ((i.ToString() != "...") && (i.ToString() != "»"))
+                        {
+                            res = int.Parse(i.ToString());
+                        }
                     }
                 }
+                return res;
             }
+            catch (xNetStandart.HttpException)
+            {
+                return Count_in_freebiesglobal();
+            }
+            
         }
-    #endregion
+        #endregion
 
         #region Hàm cần dùng
         bool Check_Udemy_Course_is_free(string Link) //Đã hoàn thiện
@@ -703,13 +684,12 @@ namespace Khai_thác_Udemy_free
 
         private void btRun_Click(object sender, RoutedEventArgs e)
         {
-            int sotrang = 1;
+            int sotrang = 0;
             Thread thr = new Thread(() =>
             {
-                sotrang = Count_in_teachinguide();
-            });
+                sotrang  = Count_in_freebiesglobal();
+            });            
             thr.Start();
-            
         }
 
 
@@ -717,3 +697,7 @@ namespace Khai_thác_Udemy_free
         
     }
 }
+
+
+
+
