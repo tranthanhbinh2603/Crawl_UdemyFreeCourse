@@ -254,6 +254,32 @@ namespace Khai_thác_Udemy_free
             }
             
         }
+
+        int Count_in_udemycouponsme() //https://udemycoupons.me/freeudemycourse/ - Đã hoàn thành
+        {
+            try
+            {
+                HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = 3000;
+                string html = http.Get("https://udemycoupons.me/freeudemycourse/").ToString();
+                int res = 0;
+
+                Regex reg = new Regex(@"<a href=""https://udemycoupons.me/freeudemycourse/page/(?<Link>.*?)/"" class="".*?"" title="".*?"">", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
+                {
+                    foreach (Capture i in item.Groups["Link"].Captures)
+                    {
+                        res = int.Parse(i.ToString());   
+                    }
+                }
+                return res;
+            }
+            catch (xNetStandart.HttpException)
+            {
+                return Count_in_udemycouponsme();
+            }
+            
+        }
         #endregion
 
         #region Hàm cần dùng
@@ -687,7 +713,7 @@ namespace Khai_thác_Udemy_free
             int sotrang = 0;
             Thread thr = new Thread(() =>
             {
-                sotrang  = Count_in_freebiesglobal();
+                sotrang  = Count_in_udemycouponsme();
             });            
             thr.Start();
         }
