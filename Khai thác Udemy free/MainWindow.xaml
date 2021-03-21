@@ -13,25 +13,22 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
-            <RowDefinition Height="20"></RowDefinition>
-            <RowDefinition Height="20"></RowDefinition>
-            <RowDefinition Height="20"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <!--Phân cách-->
-        <TextBox x:Name="tbPath"></TextBox>
-        <Button Grid.Column="1" x:Name="btGetPath" Click="btGetPath_Click">Lấy địa chỉ trình duyệt</Button>
-        <Button Grid.ColumnSpan="2" Grid.Row="1" x:Name="btSignIn" Click="btSignIn_Click">Đăng nhập</Button>
-        <Button Grid.Row="3" Grid.ColumnSpan="2" x:Name="btRun" Click="btRun_Click">Thực thi</Button>
-        <CheckBox Grid.Row="2">Sau khi check xong cho vào tài khoản</CheckBox>
-        <ListView Margin="10" Name="lvUsers" Grid.Row="4" Grid.ColumnSpan="2">
+        <!--<TextBox x:Name="tbPath"></TextBox>
+        <Button Grid.Column="1" x:Name="btGetPath" Click="btGetPath_Click">Lấy địa chỉ trình duyệt</Button>-->
+        <!--<Button Grid.ColumnSpan="2" Grid.Row="1" x:Name="btSignIn" Click="btSignIn_Click">Đăng nhập</Button>-->
+        <Button Grid.Row="0" Grid.ColumnSpan="2" x:Name="btRun" Click="btRun_Click">Thực thi</Button>
+        <!--<CheckBox Grid.Row="2">Sau khi check xong cho vào tài khoản</CheckBox>-->
+        <ListView Name="lvUsers" Grid.Row="1" Grid.ColumnSpan="2">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Tên luồng" Width="120" DisplayMemberBinding="{Binding ThreadName}" />
+                    <GridViewColumn Header="Tên luồng" Width="180" DisplayMemberBinding="{Binding ThreadName}" />
                     <GridViewColumn Header="Trạng thái" Width="200" DisplayMemberBinding="{Binding Captions}" />
                 </GridView>
             </ListView.View>
         </ListView>
-        <DockPanel x:Name="pnNeo" HorizontalAlignment="Left" Height="100" LastChildFill="False" Margin="70,259,0,-119" Grid.Row="4" VerticalAlignment="Top" Width="100" Grid.Column="1"/>
+        <!--<DockPanel x:Name="pnNeo" HorizontalAlignment="Left" Height="100" LastChildFill="False" Margin="70,259,0,-119" Grid.Row="4" VerticalAlignment="Top" Width="100" Grid.Column="1"/>-->
     </Grid>
 </Window>

@@ -18,32 +18,33 @@ namespace Khai_thác_Udemy_free
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    
-    class Trangthai
+
+    #region Hàm hiển thị thông tin thay đổi trạng thái listview
+    class Trangthai : INotifyPropertyChanged
     {
-        private string _ThreadName;
+        private string _threadName;
         public string ThreadName
         {
             get
             {
-                return _ThreadName;
+                return _threadName;
             }
             set
             {
-                _ThreadName = value;
+                _threadName = value;
                 OnPropertyChanged("ThreadName");
             }
         }
-        private string _Captions;
+        private string _captions;
         public string Captions
         {
             get
             {
-                return _Captions;
+                return _captions;
             }
             set
             {
-                _Captions = value;
+                _captions = value;
                 OnPropertyChanged("Captions");
             }
         }
@@ -52,9 +53,13 @@ namespace Khai_thác_Udemy_free
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
+    #endregion
     public partial class MainWindow : Window
     {
         #region Biến cần dùng & Một số hàm không liên quan
@@ -94,10 +99,13 @@ namespace Khai_thác_Udemy_free
         {
             InitializeComponent();
             items = new ObservableCollection<Trangthai>();
-            items.Add(new Trangthai() { ThreadName = "Realdiscount", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "couponscorpion", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "onlinecourses", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "udemyfreebies", Captions = "" });
+            items.Add(new Trangthai() { ThreadName = "Free Coupon Discount", Captions = "" });
+            items.Add(new Trangthai() { ThreadName = "Real Discount", Captions = "" });
+            items.Add(new Trangthai() { ThreadName = "Yo! Free Samples", Captions = "" });
+            items.Add(new Trangthai() { ThreadName = "Coupon Scorpion", Captions = "" });
+            items.Add(new Trangthai() { ThreadName = "Online Courses", Captions = "" });
+            items.Add(new Trangthai() { ThreadName = "Oz Bargain", Captions = "" });
+            items.Add(new Trangthai() { ThreadName = "Udemy Freebies", Captions = "" });
             items.Add(new Trangthai() { ThreadName = "teachinguide", Captions = "" });
             items.Add(new Trangthai() { ThreadName = "discudemy", Captions = "" });
             items.Add(new Trangthai() { ThreadName = "freebiesglobal", Captions = "" });
@@ -652,32 +660,33 @@ namespace Khai_thác_Udemy_free
 
         void Choose_Folder()
         {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.IsFolderPicker = true;
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-            {
-                tbPath.Text = dialog.FileName;
-            }
+            //CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            //dialog.IsFolderPicker = true;
+            //if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            //{
+            //    tbPath.Text = dialog.FileName;
+            //}
         }
 
         void Create_browser()
         {
-            var driverService = ChromeDriverService.CreateDefaultService();
-            driverService.HideCommandPromptWindow = true;
-            ChromeOptions option = new ChromeOptions();
-            option.AddExcludedArgument("enable-automation");
-            option.AddAdditionalCapability("useAutomationExtension", false);
-            option.AddArguments("--disable-notifications");
-            tbPath.Dispatcher.Invoke(() => option.AddArgument(@"user-data-dir=" + tbPath.Text));
-            ChromeDriver chromeDriver = new ChromeDriver(driverService, option);
+            //var driverService = ChromeDriverService.CreateDefaultService();
+            //driverService.HideCommandPromptWindow = true;
+            //ChromeOptions option = new ChromeOptions();
+            //option.AddExcludedArgument("enable-automation");
+            //option.AddAdditionalCapability("useAutomationExtension", false);
+            //option.AddArguments("--disable-notifications");
+            //tbPath.Dispatcher.Invoke(() => option.AddArgument(@"user-data-dir=" + tbPath.Text));
+            //ChromeDriver chromeDriver = new ChromeDriver(driverService, option);
             
-            chromeDriver.Navigate().GoToUrl(@"https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&service=mail&sacu=1&rip=1&flowName=GlifWebSignIn&flowEntry=ServiceLogin");
+            //chromeDriver.Navigate().GoToUrl(@"https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&service=mail&sacu=1&rip=1&flowName=GlifWebSignIn&flowEntry=ServiceLogin");
 
-            MessageBox.Show("Bạn vui lòng nhập địa chỉ đăng nhập của mình");
+            //MessageBox.Show("Bạn vui lòng nhập địa chỉ đăng nhập của mình");
         }
 
         void Runner() //Hàm dùng để chạy khi chương trình chạy
         {
+            #region Code chạy ban đầu
             //btRun.Dispatcher.Invoke(() => btRun.IsEnabled = false);
             //pnNeo.Dispatcher.Invoke(() => tbRes.Text += "Đang thực hiện crawler trang Link.Discount!\n");
             //Thread.Sleep(20);
@@ -737,12 +746,56 @@ namespace Khai_thác_Udemy_free
             //Thread.Sleep(20);
             //tbRes.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
             //btRun.Dispatcher.Invoke(() => btRun.IsEnabled = true);
-
+            #endregion
             Thread thr1 = new Thread(() =>
             {
-                int a = Count_in_couponscorpion();
+                int a = Count_in_realdiscount();
+                items[1].Captions = "Có tất cả " + a + " trang";
             });
-        } 
+            Thread thr2 = new Thread(() =>
+            {
+                int b = Count_in_couponscorpion();
+                items[3].Captions = "Có tất cả " + b + " trang";
+            });
+            Thread thr3 = new Thread(() =>
+            {
+                int c = Count_in_onlinecourses();
+                items[4].Captions = "Có tất cả " + c + " trang";
+            });
+            Thread thr4 = new Thread(() =>
+            {
+                int e = Count_in_udemyfreebies();
+                items[6].Captions = "Có tất cả " + e + " trang";
+            });
+            Thread thr5 = new Thread(() =>
+            {
+                int f = Count_in_teachinguide();
+                items[7].Captions = "Có tất cả " + f + " trang";
+            });
+            Thread thr6 = new Thread(() =>
+            {
+                int g = Count_in_discudemy();
+                items[8].Captions = "Có tất cả " + g + " trang";
+            });
+            Thread thr7 = new Thread(() =>
+            {
+                int h = Count_in_freebiesglobal();
+                items[9].Captions = "Có tất cả " + h + " trang";
+            });
+            Thread thr8 = new Thread(() =>
+            {
+                int i = Count_in_udemycouponsme();
+                items[10].Captions = "Có tất cả " + i + " trang";
+            });
+            thr1.Start();
+            thr2.Start();
+            thr3.Start();
+            thr4.Start();
+            thr5.Start();
+            thr6.Start();
+            thr7.Start();
+            thr8.Start();
+        }
 
         #endregion
 
@@ -763,11 +816,10 @@ namespace Khai_thác_Udemy_free
 
         private void btRun_Click(object sender, RoutedEventArgs e)
         {
-            int sotrang = 0;
             Thread thr = new Thread(() =>
             {
-                sotrang  = Count_in_udemycouponsme();
-            });            
+                Runner();
+            });
             thr.Start();
         }
 
