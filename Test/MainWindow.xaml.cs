@@ -1,77 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace Test
+namespace WpfTutorialSamples.ListView_control
 {
-    class Item : INotifyPropertyChanged
+    public partial class ListViewGroupSample : Window
     {
-        private string _Name;
-        public string Name
+        public ListViewGroupSample()
         {
-            get
-            {
-                return _Name;
-            }
-            set
-            {
-                _Name = value;
-                OnPropertyChanged("Name");
-            }
-        }
-        private string _Captions;
-        public string Captions {
-            get
-            {
-                return _Captions;
-            }
-            set
-            {
-                _Captions = value;
-                OnPropertyChanged("Captions");
-            }
-        }
+            InitializeComponent();
+            List<User> items = new List<User>();
+            items.Add(new User() { Name = "John Doe", Age = 42, Sex = SexType.Male });
+            items.Add(new User() { Name = "Jane Doe", Age = 39, Sex = SexType.Female });
+            items.Add(new User() { Name = "Sammy Doe", Age = 13, Sex = SexType.Male });
+            lvUsers.ItemsSource = items;
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvUsers.ItemsSource);
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Sex");
+            view.GroupDescriptions.Add(groupDescription);
         }
     }
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    
-    public partial class MainWindow : Window
-    {
-        ObservableCollection<Item> items;
-        public MainWindow()
-        {            
-            InitializeComponent();
-            items = new ObservableCollection<Item>();
-            items.Add(new Item() { Name = "Bình", Captions = "Tôi đây" });
-            items.Add(new Item() { Name = "Ánh", Captions = "Tôi đây" });
-            items.Add(new Item() { Name = "Thương", Captions = "Tôi đây" });
-            lvUsers.ItemsSource = items;
-        }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            items[1].Captions = "Địt mẹ nó";
-        }
+    public enum SexType { Male, Female };
+
+    public class User
+    {
+        public string Name { get; set; }
+
+        public int Age { get; set; }
+
+        public string Mail { get; set; }
+
+        public SexType Sex { get; set; }
     }
 }

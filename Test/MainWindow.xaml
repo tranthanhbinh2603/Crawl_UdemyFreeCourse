@@ -1,21 +1,25 @@
-﻿<Window x:Class="Test.MainWindow"
+﻿<Window x:Class="WpfTutorialSamples.ListView_control.ListViewGroupSample"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ListViewGridViewSample" Height="200" Width="400">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-
-        <Button Click="Button_Click">Thay đổi</Button>
-        <ListView Margin="10" Name="lvUsers" Grid.Row="1">
+        Title="ListViewGroupSample" Height="300" Width="300">
+    <Grid Margin="10">
+        <ListView Name="lvUsers">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Tên" Width="120" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="Nội dung" DisplayMemberBinding="{Binding Captions}" />
+                    <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Age" Width="50" DisplayMemberBinding="{Binding Age}" />
                 </GridView>
             </ListView.View>
+
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
         </ListView>
     </Grid>
 </Window>

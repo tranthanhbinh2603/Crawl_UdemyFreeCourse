@@ -60,6 +60,7 @@ namespace Khai_thác_Udemy_free
         }
     }
     #endregion
+
     public partial class MainWindow : Window
     {
         #region Biến cần dùng & Một số hàm không liên quan
@@ -414,77 +415,82 @@ namespace Khai_thác_Udemy_free
             }
         }
 
-        void Crawl_in_freecoupondiscount() //https://freecoupondiscount.com/  - Đã Hoàn Thiện
+        string Get_html_in_link(string Page, int Timeout)
         {
-            //bool Next = true;
-
-            //while (Next)
-            //{
-            //    int Page = 1;
-            //    tbRes.Dispatcher.Invoke(() => tbRes.Text += "Đang khai thác trang thứ " + Page + "\n");
-            //    Thread.Sleep(20);
-            //    pnNeo.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
-            //    List<string> listlink_freecoupondiscount = new List<string>(12);
-            //    HttpRequest http = new HttpRequest();
-            //    string html = http.Get("https://freecoupondiscount.com/page/" + Page + "/").ToString();
-
-            //    Regex reg = new Regex(@"<article(.*?)</article>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            //    foreach (Match item in reg.Matches(html))
-            //    {
-            //        Regex reg2 = new Regex(@"href=(?<Link>.*?) itemprop=url ", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            //        foreach (Match item2 in reg2.Matches(item.ToString()))
-            //        {
-            //            foreach (Capture i in item2.Groups["Link"].Captures)
-            //            {
-            //                listlink_freecoupondiscount.Add(i.ToString());
-            //            }
-            //        }
-            //    }
-
-            //    List<string> list_link_freecoupondiscount_no_dupcate = listlink_freecoupondiscount.Distinct().ToList();
-
-            //    foreach (var item in list_link_freecoupondiscount_no_dupcate)
-            //    {
-            //        tbRes.Dispatcher.Invoke(() => tbRes.Text += "Đang xem xét trang " + item + "\n");
-            //        Thread.Sleep(20);
-            //        pnNeo.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
-            //        HttpRequest http1 = new HttpRequest();
-            //        string html1 = http1.Get(item).ToString();
-            //        Regex reg1 = new Regex(@"href=""(?<Link>https://click.linksynergy.com/deeplink.*?)""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            //        foreach (Match item1 in reg1.Matches(html1))
-            //        {
-            //            foreach (Capture i in item1.Groups["Link"].Captures)
-            //            {
-            //                string link_udemy = WebUtility.UrlDecode(i.ToString().Substring(i.ToString().LastIndexOf('=') + 1, i.ToString().Length - i.ToString().LastIndexOf('=') - 1));
-            //                tbRes.Dispatcher.Invoke(() => tbRes.Text += "Đang quét trang " + link_udemy + " còn sống hay không.\n");
-            //                if (Check_Udemy_Course_is_free(link_udemy))
-            //                {
-            //                    tbRes.Dispatcher.Invoke(() => tbRes.Text += "Trang " + link_udemy + " còn sống.\n");
-            //                    Thread.Sleep(20);
-            //                    pnNeo.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
-            //                    listlink.Add(link_udemy);
-            //                }
-            //                else
-            //                {
-            //                    tbRes.Dispatcher.Invoke(() => tbRes.Text += "Trang " + link_udemy + " không còn sống.\n");
-            //                    tbRes.Dispatcher.Invoke(() => tbRes.Text += "Kết thúc quét!\n");
-            //                    Thread.Sleep(20);
-            //                    pnNeo.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
-            //                    Next = false;
-            //                    return;
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    if (Next == true)
-            //    {
-            //        Page++;
-            //    }
-            //}
+            try
+            {
+                HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = Timeout;
+                return http.Get(Page).ToString();
+            }
+            catch (xNetStandart.HttpException)
+            {
+                return Get_html_in_link(Page,Timeout);
+            }            
         }
 
-        void Crawl_realdiscount() //Hàm chính dùng để crawler trang https://www.real.discount/  - Đã hoàn thành
+
+        void Crawl_in_freecoupondiscount() //https://freecoupondiscount.com/  - Đã Hoàn Thiện
+        {
+            bool Next = true;
+
+            while (Next)
+            {
+                int Page = 1;
+                int Pageplus = 0;
+                List<string> listlink_freecoupondiscount = new List<string>(12);
+                items[0].Captions = "Đang crawler trang thứ " + Page;
+                string html = Get_html_in_link("https://freecoupondiscount.com/page/" + Page + "/", 3000);
+
+                Regex reg = new Regex(@"<article(.*?)</article>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
+                {
+                    Regex reg2 = new Regex(@"a href=""(?<Link>.*?)"" itemprop=""url""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                    foreach (Match item2 in reg2.Matches(item.ToString()))
+                    {
+                        foreach (Capture i in item2.Groups["Link"].Captures)
+                        {
+                            listlink_freecoupondiscount.Add(i.ToString());
+                        }
+                    }
+                }
+
+                List<string> list_link_freecoupondiscount_no_dupcate = listlink_freecoupondiscount.Distinct().ToList();
+
+                foreach (var item in list_link_freecoupondiscount_no_dupcate)
+                {
+                    HttpRequest http1 = new HttpRequest();
+                    string html1 = Get_html_in_link(item, 2000);
+                    Regex reg1 = new Regex(@"href=""(?<Link>https://click.linksynergy.com/deeplink.*?)""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                    foreach (Match item1 in reg1.Matches(html1))
+                    {
+                        foreach (Capture i in item1.Groups["Link"].Captures)
+                        {
+                            items[0].Captions = "Đang xem xét xem trang " + i.ToString() + " có còn sống hay không?";
+                            string link_udemy = WebUtility.UrlDecode(i.ToString().Substring(i.ToString().LastIndexOf('=') + 1, i.ToString().Length - i.ToString().LastIndexOf('=') - 1));
+                            if (Check_Udemy_Course_is_free(link_udemy))
+                            {
+                                listlink.Add(link_udemy);
+                                Pageplus++;
+                            }
+                            else
+                            {
+                                items[0].Captions = "Có tất cả " + Pageplus + " trang được thêm vào. ";
+                                Next = false;
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                if (Next == true)
+                {
+                    Page++;
+                }
+            }
+        }
+
+        void Crawl_realdiscount(int from, int to) //Hàm chính dùng để crawler trang https://www.real.discount/  - Đã hoàn thành
         {
             //bool Next = true;
             //int x = 1;
@@ -747,6 +753,10 @@ namespace Khai_thác_Udemy_free
             //tbRes.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
             //btRun.Dispatcher.Invoke(() => btRun.IsEnabled = true);
             #endregion
+            Thread thr0 = new Thread(() =>
+            {
+                Crawl_in_freecoupondiscount();
+            });
             Thread thr1 = new Thread(() =>
             {
                 int a = Count_in_realdiscount();
@@ -787,6 +797,7 @@ namespace Khai_thác_Udemy_free
                 int i = Count_in_udemycouponsme();
                 items[10].Captions = "Có tất cả " + i + " trang";
             });
+            thr0.Start();
             thr1.Start();
             thr2.Start();
             thr3.Start();
