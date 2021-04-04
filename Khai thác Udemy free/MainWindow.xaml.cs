@@ -10,16 +10,14 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
+using System.Windows.Data;
 using xNetStandart;
 #endregion
 
 namespace Khai_thác_Udemy_free
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-
     #region Hàm hiển thị thông tin thay đổi trạng thái listview
+    public enum Page { RealDiscount, CouponScorpion, OnlineCourses, UdemyFreebies, Teachinguide, Discudemy, Freebiesglobal, Udemycouponsme, Sitepoint, Coursejoiner, Tutorialbar, TongKet };
     class Trangthai : INotifyPropertyChanged
     {
         private string _threadName;
@@ -48,6 +46,8 @@ namespace Khai_thác_Udemy_free
                 OnPropertyChanged("Captions");
             }
         }
+
+        public Page Page { get; set; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -95,23 +95,62 @@ namespace Khai_thác_Udemy_free
         }
         #endregion
 
-        ObservableCollection<Trangthai> items;
+        List<Trangthai> items;
         public MainWindow()
         {
-            InitializeComponent();
-            items = new ObservableCollection<Trangthai>();
-            items.Add(new Trangthai() { ThreadName = "Free Coupon Discount", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "Real Discount", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "Yo! Free Samples", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "Coupon Scorpion", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "Online Courses", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "Oz Bargain", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "Udemy Freebies", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "teachinguide", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "discudemy", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "freebiesglobal", Captions = "" });
-            items.Add(new Trangthai() { ThreadName = "udemycouponsme", Captions = "" });
+            InitializeComponent();            
+            #region Hiển thị nội dung ban đầu
+            items = new List<Trangthai>();
+            items.Add(new Trangthai() { ThreadName = "Free Coupon Discount", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "Real Discount", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "Yo! Free Samples", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "Coupon Scorpion", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "Online Courses", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "Oz Bargain", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "Udemy Freebies", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "teachinguide", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "discudemy", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "freebiesglobal", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "udemycouponsme", Captions = "", Page = Page.TongKet });
+            for (int i = 1; i <= 5; i++) 
+            {
+                items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.RealDiscount });
+            }
+            for (int i = 1; i <= 25; i++) 
+            {
+                items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.CouponScorpion });
+            }
+            for (int i = 1; i <= 25; i++) 
+            {
+                items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Discudemy });
+            }
+            for (int i = 1; i <= 30; i++) 
+            {
+                items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Freebiesglobal });
+            }
+            for (int i = 1; i <= 30; i++) 
+            {
+                items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.OnlineCourses });
+            }
+            for (int i = 1; i <= 4; i++) 
+            {
+                items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Teachinguide });
+            }
+            for (int i = 1; i <= 5; i++) 
+            {
+                items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Udemycouponsme });
+            }
+            for (int i = 1; i <= 35; i++) //138
+            {
+                items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.UdemyFreebies });
+            }
+
             lvUsers.ItemsSource = items;
+
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvUsers.ItemsSource);
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Page");
+            view.GroupDescriptions.Add(groupDescription);
+            #endregion
         }
 
         #region Các hàm chuyên dùng đếm số trang - Đã thành công 
@@ -439,7 +478,7 @@ namespace Khai_thác_Udemy_free
                 int Page = 1;
                 int Pageplus = 0;
                 List<string> listlink_freecoupondiscount = new List<string>(12);
-                items[0].Captions = "Đang crawler trang thứ " + Page;
+                //items[0].Captions = "Đang crawler trang thứ " + Page;
                 string html = Get_html_in_link("https://freecoupondiscount.com/page/" + Page + "/", 3000);
 
                 Regex reg = new Regex(@"<article(.*?)</article>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
@@ -466,7 +505,7 @@ namespace Khai_thác_Udemy_free
                     {
                         foreach (Capture i in item1.Groups["Link"].Captures)
                         {
-                            items[0].Captions = "Đang xem xét xem trang " + i.ToString() + " có còn sống hay không?";
+                            //items[0].Captions = "Đang xem xét xem trang " + i.ToString() + " có còn sống hay không?";
                             string link_udemy = WebUtility.UrlDecode(i.ToString().Substring(i.ToString().LastIndexOf('=') + 1, i.ToString().Length - i.ToString().LastIndexOf('=') - 1));
                             if (Check_Udemy_Course_is_free(link_udemy))
                             {
@@ -475,7 +514,7 @@ namespace Khai_thác_Udemy_free
                             }
                             else
                             {
-                                items[0].Captions = "Có tất cả " + Pageplus + " trang được thêm vào. ";
+                                //items[0].Captions = "Có tất cả " + Pageplus + " trang được thêm vào. ";
                                 Next = false;
                                 return;
                             }
@@ -753,10 +792,6 @@ namespace Khai_thác_Udemy_free
             //tbRes.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
             //btRun.Dispatcher.Invoke(() => btRun.IsEnabled = true);
             #endregion
-            Thread thr0 = new Thread(() =>
-            {
-                Crawl_in_freecoupondiscount();
-            });
             Thread thr1 = new Thread(() =>
             {
                 int a = Count_in_realdiscount();
@@ -797,7 +832,6 @@ namespace Khai_thác_Udemy_free
                 int i = Count_in_udemycouponsme();
                 items[10].Captions = "Có tất cả " + i + " trang";
             });
-            thr0.Start();
             thr1.Start();
             thr2.Start();
             thr3.Start();

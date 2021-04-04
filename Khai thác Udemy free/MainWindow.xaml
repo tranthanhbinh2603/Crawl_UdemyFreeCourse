@@ -24,10 +24,33 @@
         <ListView Name="lvUsers" Grid.Row="1" Grid.ColumnSpan="2">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Tên luồng" Width="180" DisplayMemberBinding="{Binding ThreadName}" />
-                    <GridViewColumn Header="Trạng thái" Width="200" DisplayMemberBinding="{Binding Captions}" />
+                    <GridViewColumn Header="Tên Luồng" Width="130" DisplayMemberBinding="{Binding ThreadName}" />
+                    <GridViewColumn Header="Trạng Thái" Width="200" DisplayMemberBinding="{Binding Captions}" />
                 </GridView>
             </ListView.View>
+
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Expander IsExpanded="False">
+                                            <Expander.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Name}" FontSize="18" VerticalAlignment="Bottom" />
+                                                </StackPanel>
+                                            </Expander.Header>
+                                            <ItemsPresenter />
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListView.GroupStyle>
         </ListView>
         <!--<DockPanel x:Name="pnNeo" HorizontalAlignment="Left" Height="100" LastChildFill="False" Margin="70,259,0,-119" Grid.Row="4" VerticalAlignment="Top" Width="100" Grid.Column="1"/>-->
     </Grid>
