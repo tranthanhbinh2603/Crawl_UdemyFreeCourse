@@ -1,9 +1,5 @@
 ﻿#region Khai báo thư viện
-using Microsoft.WindowsAPICodePack.Dialogs;
-using OpenQA.Selenium.Chrome;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
@@ -17,7 +13,7 @@ using xNetStandart;
 namespace Khai_thác_Udemy_free
 {
     #region Hàm hiển thị thông tin thay đổi trạng thái listview
-    public enum Page { RealDiscount, CouponScorpion, OnlineCourses, UdemyFreebies, Teachinguide, Discudemy, Freebiesglobal, Udemycouponsme, Sitepoint, Coursejoiner, Tutorialbar, TongKet };
+    public enum Page { RealDiscount, CouponScorpion, OnlineCourses, UdemyFreebies, Teachinguide, Discudemy, Freebiesglobal, Udemycouponsme, Sitepoint, Coursejoiner, Tutorialbar, TongKet};
     class Trangthai : INotifyPropertyChanged
     {
         private string _threadName;
@@ -112,6 +108,9 @@ namespace Khai_thác_Udemy_free
             items.Add(new Trangthai() { ThreadName = "discudemy", Captions = "", Page = Page.TongKet });
             items.Add(new Trangthai() { ThreadName = "freebiesglobal", Captions = "", Page = Page.TongKet });
             items.Add(new Trangthai() { ThreadName = "udemycouponsme", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "Sitepoint", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "Coursejoiner", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "Tutorialbar", Captions = "", Page = Page.TongKet });
             for (int i = 1; i <= 5; i++) 
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.RealDiscount });
@@ -140,9 +139,21 @@ namespace Khai_thác_Udemy_free
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Udemycouponsme });
             }
-            for (int i = 1; i <= 35; i++) //138
+            for (int i = 1; i <= 35; i++)
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.UdemyFreebies });
+            }
+            for (int i = 1; i <= 30; i++) 
+            {
+                items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Sitepoint });
+            }
+            for (int i = 1; i <= 25; i++)
+            {
+                items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Coursejoiner });
+            }
+            for (int i = 1; i <= 30; i++)
+            {
+                items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Tutorialbar });
             }
 
             lvUsers.ItemsSource = items;
@@ -377,6 +388,86 @@ namespace Khai_thác_Udemy_free
             }
             
         }
+
+        int Count_in_sitepoint() //https://sitepoint.us/courses/all - Đã hoàn thành
+        {
+            try
+            {
+                HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = 2000;
+                string html = http.Get("https://sitepoint.us/courses/all").ToString();
+                int res = 0;
+                Regex reg = new Regex(@"<a class=""pagination-single"" href=""all/.*?"">(?<Page>.*?)</a>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
+                {
+                    foreach (Capture i in item.Groups["Page"].Captures)
+                    {
+                        if (i.ToString() != "»")
+                        {
+                            res = int.Parse(i.ToString());
+                        }
+                    }
+                }
+                return res;
+            }
+            catch (xNetStandart.HttpException)
+            {
+                return Count_in_sitepoint();
+            }
+            
+        }
+
+        int Count_in_coursejoiner() //https://www.coursejoiner.com/free-best-udemy-courses/free-certificate/ - Đã hoàn thành
+        {
+            try
+            {
+                HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = 1000;
+                string html = http.Get("https://www.coursejoiner.com/free-best-udemy-courses/free-certificate/").ToString();
+                int res = 0;
+
+                Regex reg = new Regex(@"<a class=""page-numbers"" href="".*?""><span class=""elementor-screen-only"">Page</span>(?<Page>.*?)</a>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
+                {
+                    foreach (Capture i in item.Groups["Page"].Captures)
+                    {
+                        res = int.Parse(i.ToString());
+                    }
+                }
+                return res;
+            }
+            catch (xNetStandart.HttpException)
+            {
+                return Count_in_coursejoiner();
+            }
+
+        }
+
+        int Count_in_tutorialbar() //https://www.tutorialbar.com/all-courses/ - Đã hoàn thành
+        {
+            try
+            {
+                HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = 1800;
+                string html = http.Get("https://www.tutorialbar.com/all-courses/").ToString();
+                int res = 0;
+
+                Regex reg = new Regex(@"<li><a href=""https://www.tutorialbar.com/all-courses/page/.*?/"">(?<Page>.*?)</a></li>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
+                {
+                    foreach (Capture i in item.Groups["Page"].Captures)
+                    {
+                        res = int.Parse(i.ToString());
+                    }
+                }
+                return res;
+            }
+            catch (xNetStandart.HttpException)
+            {
+                return Count_in_coursejoiner();
+            }
+
+        }
         #endregion
 
         #region Hàm cần dùng
@@ -467,7 +558,6 @@ namespace Khai_thác_Udemy_free
                 return Get_html_in_link(Page,Timeout);
             }            
         }
-
 
         void Crawl_in_freecoupondiscount() //https://freecoupondiscount.com/  - Đã Hoàn Thiện
         {
@@ -832,6 +922,21 @@ namespace Khai_thác_Udemy_free
                 int i = Count_in_udemycouponsme();
                 items[10].Captions = "Có tất cả " + i + " trang";
             });
+            Thread thr9 = new Thread(() =>
+            {
+                int i = Count_in_sitepoint();
+                items[11].Captions = "Có tất cả " + i + " trang";
+            });
+            Thread thr10 = new Thread(() =>
+            {
+                int i = Count_in_coursejoiner();
+                items[12].Captions = "Có tất cả " + i + " trang";
+            });
+            Thread thr11 = new Thread(() =>
+            {
+                int i = Count_in_tutorialbar();
+                items[13].Captions = "Có tất cả " + i + " trang";
+            });
             thr1.Start();
             thr2.Start();
             thr3.Start();
@@ -840,8 +945,10 @@ namespace Khai_thác_Udemy_free
             thr6.Start();
             thr7.Start();
             thr8.Start();
+            thr9.Start();
+            thr10.Start();
+            thr11.Start();
         }
-
         #endregion
 
         #region Các hàm sự kiện
@@ -867,10 +974,7 @@ namespace Khai_thác_Udemy_free
             });
             thr.Start();
         }
-
-
-        #endregion
-        
+        #endregion        
     }
 }
 
