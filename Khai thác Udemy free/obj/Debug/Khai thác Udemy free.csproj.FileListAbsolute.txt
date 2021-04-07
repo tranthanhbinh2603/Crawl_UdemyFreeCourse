@@ -37,7 +37,6 @@ E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCou
 E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\WebDriver.dll
 E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\Leaf.xNet.xml
 E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\WebDriver.xml
-E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\xNetStandart.pdb
 E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai thác Udemy free.csprojResolveAssemblyReference.cache
 E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\MainWindow.g.cs
 E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\App.g.cs
@@ -48,3 +47,5 @@ E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCou
 E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai_thác_Udemy_free.Properties.Resources.resources
 E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai thác Udemy free.csproj.GenerateResource.Cache
 E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\xNet.dll
+E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\xNetStandart.dll
+E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\xNetStandart.pdb

@@ -82,11 +82,13 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="xNet">
+    <Reference Include="xNet, Version=3.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\dllInstall\xNet.dll</HintPath>
     </Reference>
-    <Reference Include="xNetStandart">
-      <HintPath>..\..\..\..\..\Download\Compressed\xNetStandart\xNetStandart.dll</HintPath>
+    <Reference Include="xNetStandart, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Download\Compressed\xNetStandart\xNetStandart.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

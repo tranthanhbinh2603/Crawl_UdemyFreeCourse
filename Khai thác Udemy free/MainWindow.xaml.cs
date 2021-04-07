@@ -7,13 +7,13 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Data;
-using xNetStandart;
+using xNet;
 #endregion
 
 namespace Khai_thác_Udemy_free
 {
     #region Hàm hiển thị thông tin thay đổi trạng thái listview
-    public enum Page { RealDiscount, CouponScorpion, OnlineCourses, UdemyFreebies, Teachinguide, Discudemy, Freebiesglobal, Udemycouponsme, Sitepoint, Coursejoiner, Tutorialbar, TongKet};
+    public enum Page { RealDiscount, CouponScorpion, OnlineCourses, UdemyFreebies, Teachinguide, Discudemy, Freebiesglobal, Udemycouponsme, Sitepoint, Coursejoiner, Tutorialbar, TongKet };
     class Trangthai : INotifyPropertyChanged
     {
         private string _threadName;
@@ -73,11 +73,11 @@ namespace Khai_thác_Udemy_free
             int a = 0;
 
             for (int i = 0; i < list2.Count; i++)
-            {                
+            {
                 if (list1[i] == list2[i])
                 {
                     a++;
-                }                
+                }
             }
             if ((a == list1.Count) && (list1.Count == list2.Count))
             {
@@ -87,14 +87,14 @@ namespace Khai_thác_Udemy_free
             {
                 return true;
             }
-           
+
         }
         #endregion
 
         List<Trangthai> items;
         public MainWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();
             #region Hiển thị nội dung ban đầu
             items = new List<Trangthai>();
             items.Add(new Trangthai() { ThreadName = "Free Coupon Discount", Captions = "", Page = Page.TongKet });
@@ -111,31 +111,31 @@ namespace Khai_thác_Udemy_free
             items.Add(new Trangthai() { ThreadName = "Sitepoint", Captions = "", Page = Page.TongKet });
             items.Add(new Trangthai() { ThreadName = "Coursejoiner", Captions = "", Page = Page.TongKet });
             items.Add(new Trangthai() { ThreadName = "Tutorialbar", Captions = "", Page = Page.TongKet });
-            for (int i = 1; i <= 5; i++) 
+            for (int i = 1; i <= 5; i++)
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.RealDiscount });
             }
-            for (int i = 1; i <= 25; i++) 
+            for (int i = 1; i <= 25; i++)
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.CouponScorpion });
             }
-            for (int i = 1; i <= 25; i++) 
+            for (int i = 1; i <= 25; i++)
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Discudemy });
             }
-            for (int i = 1; i <= 30; i++) 
+            for (int i = 1; i <= 30; i++)
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Freebiesglobal });
             }
-            for (int i = 1; i <= 30; i++) 
+            for (int i = 1; i <= 30; i++)
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.OnlineCourses });
             }
-            for (int i = 1; i <= 4; i++) 
+            for (int i = 1; i <= 4; i++)
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Teachinguide });
             }
-            for (int i = 1; i <= 5; i++) 
+            for (int i = 1; i <= 5; i++)
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Udemycouponsme });
             }
@@ -143,7 +143,7 @@ namespace Khai_thác_Udemy_free
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.UdemyFreebies });
             }
-            for (int i = 1; i <= 30; i++) 
+            for (int i = 1; i <= 30; i++)
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.Sitepoint });
             }
@@ -169,7 +169,7 @@ namespace Khai_thác_Udemy_free
         {
             try
             {
-                HttpRequest http = new HttpRequest();
+                xNetStandart.HttpRequest http = new xNetStandart.HttpRequest();
                 http.ConnectTimeout = 30000;
                 string html = http.Get("https://app.real.discount/free-courses/").ToString();
                 string res = "";
@@ -178,7 +178,7 @@ namespace Khai_thác_Udemy_free
                 {
                     foreach (Capture i in item.Groups["Page"].Captures)
                     {
-                         res = i.ToString();
+                        res = i.ToString();
                     }
                 }
                 return (int.Parse(res) / 12) + (int.Parse(res) > 0 ? 1 : 0);
@@ -212,11 +212,11 @@ namespace Khai_thác_Udemy_free
                 }
                 return res;
             }
-            catch (xNetStandart.HttpException)
+            catch (xNet.HttpException)
             {
                 return Count_in_couponscorpion();
             }
-            
+
 
         }
 
@@ -241,11 +241,11 @@ namespace Khai_thác_Udemy_free
                 int sotrang = int.Parse(count) / 10 + (int.Parse(count) % 10 != 0 ? 1 : 0);
                 return sotrang;
             }
-            catch (xNetStandart.HttpException)
+            catch (xNet.HttpException)
             {
                 return Count_in_onlinecourses();
             }
-            
+
         }
 
         int Count_in_udemyfreebies() //https://www.udemyfreebies.com/ - Đã hoàn thành
@@ -274,18 +274,18 @@ namespace Khai_thác_Udemy_free
 
                 return res;
             }
-            catch (xNetStandart.HttpException)
+            catch (xNet.HttpException)
             {
                 return Count_in_udemyfreebies();
-            }           
+            }
         }
 
         int Count_in_teachinguide() // https://www.teachinguide.com/ - Đã hoàn thành
         {
             try
             {
-                HttpRequest http = new HttpRequest();
-                http.ConnectTimeout = 2000;
+                xNetStandart.HttpRequest http = new xNetStandart.HttpRequest();
+                http.ConnectTimeout = 5000;
                 string html = http.Get("https://teachinguide.azure-api.net/course-coupon?sortCol=featured&sortDir=DESC&length=12&page=1&inkw=&discount=100&language=&").ToString();
                 int res = 0;
 
@@ -327,11 +327,11 @@ namespace Khai_thác_Udemy_free
                 }
                 return res;
             }
-            catch (xNetStandart.HttpException)
+            catch (xNet.HttpException)
             {
                 return Count_in_discudemy();
             }
-            
+
         }
 
         int Count_in_freebiesglobal() //https://freebiesglobal.com/dealstore/udemy - Đã hoàn thành
@@ -356,11 +356,11 @@ namespace Khai_thác_Udemy_free
                 }
                 return res;
             }
-            catch (xNetStandart.HttpException)
+            catch (xNet.HttpException)
             {
                 return Count_in_freebiesglobal();
             }
-            
+
         }
 
         int Count_in_udemycouponsme() //https://udemycoupons.me/freeudemycourse/ - Đã hoàn thành
@@ -377,23 +377,23 @@ namespace Khai_thác_Udemy_free
                 {
                     foreach (Capture i in item.Groups["Link"].Captures)
                     {
-                        res = int.Parse(i.ToString());   
+                        res = int.Parse(i.ToString());
                     }
                 }
                 return res;
             }
-            catch (xNetStandart.HttpException)
+            catch (xNet.HttpException)
             {
                 return Count_in_udemycouponsme();
             }
-            
+
         }
 
         int Count_in_sitepoint() //https://sitepoint.us/courses/all - Đã hoàn thành
         {
             try
             {
-                HttpRequest http = new HttpRequest();
+                xNetStandart.HttpRequest http = new xNetStandart.HttpRequest();
                 http.ConnectTimeout = 2000;
                 string html = http.Get("https://sitepoint.us/courses/all").ToString();
                 int res = 0;
@@ -414,7 +414,7 @@ namespace Khai_thác_Udemy_free
             {
                 return Count_in_sitepoint();
             }
-            
+
         }
 
         int Count_in_coursejoiner() //https://www.coursejoiner.com/free-best-udemy-courses/free-certificate/ - Đã hoàn thành
@@ -436,7 +436,7 @@ namespace Khai_thác_Udemy_free
                 }
                 return res;
             }
-            catch (xNetStandart.HttpException)
+            catch (xNet.HttpException)
             {
                 return Count_in_coursejoiner();
             }
@@ -462,7 +462,7 @@ namespace Khai_thác_Udemy_free
                 }
                 return res;
             }
-            catch (xNetStandart.HttpException)
+            catch (xNet.HttpException)
             {
                 return Count_in_coursejoiner();
             }
@@ -473,90 +473,110 @@ namespace Khai_thác_Udemy_free
         #region Hàm cần dùng
         bool Check_Udemy_Course_is_free(string Link) //Đã hoàn thiện
         {
-            HttpRequest http = new HttpRequest();
-            string course_id = "";
-            string html = http.Get(Link).ToString();
-            Regex reg = new Regex(@"course_id&quot;:(?<Course_id>\d+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            foreach (Match item in reg.Matches(html))
-            {
-                foreach (Capture i in item.Groups["Course_id"].Captures)
-                {
-                    course_id = i.ToString();
-                }
-            }
-            string classify = "";
-            if (Link[Link.Length-1]=='/')
-            {
-                string Link_remove = Link.Remove(Link.Length - 1, 1);
-                classify = Link_remove.Substring(Link_remove.LastIndexOf('/'), Link_remove.Length - Link_remove.LastIndexOf('/'));
-            }
-            else
-            {
-                classify = Link.Substring(Link.LastIndexOf('/'), Link.Length - Link.LastIndexOf('/'));
-            }
-            string comcat = "?couponCode=";
-            if (classify.Contains(comcat))
-            {
-                string cuppon_code = Link.Substring(Link.LastIndexOf('='), Link.Length - Link.LastIndexOf('=')).Replace("=", "");
-
-                HttpRequest http1 = new HttpRequest();
-                string price = http1.Get("https://www.udemy.com/api-2.0/course-landing-components/" + course_id + "/me/?persist_locale=&locale=en_US&couponCode=" + cuppon_code + "&components=deal_badge,discount_expiration,gift_this_course,price_text,purchase,redeem_coupon,cacheable_deal_badge,cacheable_discount_expiration,cacheable_price_text,cacheable_buy_button,buy_button,buy_for_team,cacheable_purchase_text,cacheable_add_to_cart,money_back_guarantee,instructor_links,top_companies_notice_context,curated_for_ufb_notice,sidebar_container,purchase_tabs_context,subscribe_team_modal_context").ToString();
-                string Pricestr = "";
-                Regex reg2 = new Regex(@"purchasePrice"":{.*?price_string"":""(?<Price>.*?)""");
-                foreach (Match item in reg2.Matches(price))
-                {
-                    foreach (Capture i in item.Groups["Price"].Captures)
-                    {
-                        Pricestr = i.ToString();
-                    }
-                }
-
-                if (Pricestr == "Free")
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                HttpRequest http1 = new HttpRequest();
-                string price = http1.Get("https://www.udemy.com/api-2.0/course-landing-components/" + course_id + "/me/?persist_locale=&locale=en_US&components=deal_badge,discount_expiration,gift_this_course,price_text,purchase,redeem_coupon,cacheable_deal_badge,cacheable_discount_expiration,cacheable_price_text,cacheable_buy_button,buy_button,buy_for_team,cacheable_purchase_text,cacheable_add_to_cart,money_back_guarantee,instructor_links,top_companies_notice_context,curated_for_ufb_notice,sidebar_container,purchase_tabs_context,subscribe_team_modal_context").ToString();
-                string Pricestr = "";
-                Regex reg2 = new Regex(@"purchasePrice"":{.*?price_string"":""(?<Price>.*?)""");
-                foreach (Match item in reg2.Matches(price))
-                {
-                    foreach (Capture i in item.Groups["Price"].Captures)
-                    {
-                        Pricestr = i.ToString();
-                    }
-                }
-
-                if (Pricestr == "Free")
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-
-        string Get_html_in_link(string Page, int Timeout)
-        {
             try
             {
                 HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = 7000;
+                string course_id = "";
+                string html = http.Get(Link).ToString();
+                Regex reg = new Regex(@"course_id&quot;:(?<Course_id>\d+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
+                {
+                    foreach (Capture i in item.Groups["Course_id"].Captures)
+                    {
+                        course_id = i.ToString();
+                    }
+                }
+                string classify = "";
+                if (Link[Link.Length - 1] == '/')
+                {
+                    string Link_remove = Link.Remove(Link.Length - 1, 1);
+                    classify = Link_remove.Substring(Link_remove.LastIndexOf('/'), Link_remove.Length - Link_remove.LastIndexOf('/'));
+                }
+                else
+                {
+                    classify = Link.Substring(Link.LastIndexOf('/'), Link.Length - Link.LastIndexOf('/'));
+                }
+                string comcat = "?couponCode=";
+                if (classify.Contains(comcat))
+                {
+                    string cuppon_code = Link.Substring(Link.LastIndexOf('='), Link.Length - Link.LastIndexOf('=')).Replace("=", "");
+
+                    HttpRequest http1 = new HttpRequest();
+                    string price = http1.Get("https://www.udemy.com/api-2.0/course-landing-components/" + course_id + "/me/?persist_locale=&locale=en_US&couponCode=" + cuppon_code + "&components=deal_badge,discount_expiration,gift_this_course,price_text,purchase,redeem_coupon,cacheable_deal_badge,cacheable_discount_expiration,cacheable_price_text,cacheable_buy_button,buy_button,buy_for_team,cacheable_purchase_text,cacheable_add_to_cart,money_back_guarantee,instructor_links,top_companies_notice_context,curated_for_ufb_notice,sidebar_container,purchase_tabs_context,subscribe_team_modal_context").ToString();
+                    string Pricestr = "";
+                    Regex reg2 = new Regex(@"purchasePrice"":{.*?price_string"":""(?<Price>.*?)""");
+                    foreach (Match item in reg2.Matches(price))
+                    {
+                        foreach (Capture i in item.Groups["Price"].Captures)
+                        {
+                            Pricestr = i.ToString();
+                        }
+                    }
+
+                    if (Pricestr == "Free")
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    HttpRequest http1 = new HttpRequest();
+                    string price = http1.Get("https://www.udemy.com/api-2.0/course-landing-components/" + course_id + "/me/?persist_locale=&locale=en_US&components=deal_badge,discount_expiration,gift_this_course,price_text,purchase,redeem_coupon,cacheable_deal_badge,cacheable_discount_expiration,cacheable_price_text,cacheable_buy_button,buy_button,buy_for_team,cacheable_purchase_text,cacheable_add_to_cart,money_back_guarantee,instructor_links,top_companies_notice_context,curated_for_ufb_notice,sidebar_container,purchase_tabs_context,subscribe_team_modal_context").ToString();
+                    string Pricestr = "";
+                    Regex reg2 = new Regex(@"purchasePrice"":{.*?price_string"":""(?<Price>.*?)""");
+                    foreach (Match item in reg2.Matches(price))
+                    {
+                        foreach (Capture i in item.Groups["Price"].Captures)
+                        {
+                            Pricestr = i.ToString();
+                        }
+                    }
+
+                    if (Pricestr == "Free")
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (xNet.HttpException)
+            {
+                return Check_Udemy_Course_is_free(Link);
+            }
+        }
+
+        string Get_html_in_link(string Page, int Timeout, HttpRequest http)
+        {
+            try
+            {
+                http.ConnectTimeout = Timeout;
+                return http.Get(Page).ToString();
+            }
+            catch (HttpException)
+            {
+                return Get_html_in_link(Page, Timeout, http);
+            }
+        }
+
+        string Get_html_in_link(string Page, int Timeout, xNetStandart.HttpRequest http)
+        {
+            try
+            {
                 http.ConnectTimeout = Timeout;
                 return http.Get(Page).ToString();
             }
             catch (xNetStandart.HttpException)
             {
-                return Get_html_in_link(Page,Timeout);
-            }            
+                return Get_html_in_link(Page, Timeout, http);
+            }
         }
 
         void Crawl_in_freecoupondiscount() //https://freecoupondiscount.com/  - Đã Hoàn Thiện
@@ -568,8 +588,9 @@ namespace Khai_thác_Udemy_free
                 int Page = 1;
                 int Pageplus = 0;
                 List<string> listlink_freecoupondiscount = new List<string>(12);
-                //items[0].Captions = "Đang crawler trang thứ " + Page;
-                string html = Get_html_in_link("https://freecoupondiscount.com/page/" + Page + "/", 3000);
+                items[0].Captions = "Đang crawler trang thứ " + Page;
+                xNetStandart.HttpRequest http = new xNetStandart.HttpRequest();
+                string html = Get_html_in_link("https://freecoupondiscount.com/page/" + Page + "/", 3000, http);
 
                 Regex reg = new Regex(@"<article(.*?)</article>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
                 foreach (Match item in reg.Matches(html))
@@ -588,14 +609,14 @@ namespace Khai_thác_Udemy_free
 
                 foreach (var item in list_link_freecoupondiscount_no_dupcate)
                 {
-                    HttpRequest http1 = new HttpRequest();
-                    string html1 = Get_html_in_link(item, 2000);
+                    xNetStandart.HttpRequest http1 = new xNetStandart.HttpRequest();
+                    string html1 = Get_html_in_link(item.ToString(), 2000, http1);
                     Regex reg1 = new Regex(@"href=""(?<Link>https://click.linksynergy.com/deeplink.*?)""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
                     foreach (Match item1 in reg1.Matches(html1))
                     {
                         foreach (Capture i in item1.Groups["Link"].Captures)
                         {
-                            //items[0].Captions = "Đang xem xét xem trang " + i.ToString() + " có còn sống hay không?";
+                            items[0].Captions = "Đang xem xét xem trang " + i.ToString() + " có còn sống hay không?";
                             string link_udemy = WebUtility.UrlDecode(i.ToString().Substring(i.ToString().LastIndexOf('=') + 1, i.ToString().Length - i.ToString().LastIndexOf('=') - 1));
                             if (Check_Udemy_Course_is_free(link_udemy))
                             {
@@ -604,7 +625,7 @@ namespace Khai_thác_Udemy_free
                             }
                             else
                             {
-                                //items[0].Captions = "Có tất cả " + Pageplus + " trang được thêm vào. ";
+                                items[0].Captions = "Có tất cả " + Pageplus + " trang được thêm vào. ";
                                 Next = false;
                                 return;
                             }
@@ -644,7 +665,7 @@ namespace Khai_thác_Udemy_free
             //        break;
             //    }
             //}
-        } 
+        }
 
         void Crawl_in_discudemy()
         {
@@ -653,29 +674,28 @@ namespace Khai_thác_Udemy_free
 
         void Crawl_yofreesamples() //https://yofreesamples.com/courses/free-discounted-udemy-courses-list/
         {
-            //HttpRequest http = new HttpRequest();
-            //string html = http.Get("https://yofreesamples.com/courses/free-discounted-udemy-courses-list/").ToString();
+            HttpRequest http = new HttpRequest();
+            string html = Get_html_in_link("https://yofreesamples.com/courses/free-discounted-udemy-courses-list/", 7000, http);
 
-            //List<string> list_link_in_yofreesamples = new List<string>();
-            //Regex reg = new Regex(@"href=""(?<Link>https://www.udemy.com/.*?)""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            //foreach (Match item in reg.Matches(html))
-            //{
-            //    foreach (Capture i in item.Groups["Link"].Captures)
-            //    {
-            //        list_link_in_yofreesamples.Add(i.ToString());
-            //    }
-            //}
+            List<string> list_link_in_yofreesamples = new List<string>();
+            Regex reg = new Regex(@"href=""(?<Link>https://www.udemy.com/.*?)""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+            foreach (Match item in reg.Matches(html))
+            {
+                foreach (Capture i in item.Groups["Link"].Captures)
+                {
+                    list_link_in_yofreesamples.Add(i.ToString());
+                }
+            }
 
-            //int a = 0;
-            //List<string> list_link_no_dupcate = list_link_in_yofreesamples.Distinct().ToList(); 
-            //foreach (var item in list_link_no_dupcate)
-            //{
-            //    listlink.Add(item);
-            //    a++;
-            //}
-            //tbRes.Dispatcher.Invoke(() => tbRes.Text += "Tổng số lượng trang cộng vào là: " + a + "\n");
-            //Thread.Sleep(20);
-            //tbRes.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
+            int a = 0;
+            List<string> list_link_no_dupcate = list_link_in_yofreesamples.Distinct().ToList();
+            foreach (var item in list_link_no_dupcate)
+            {
+                listlink.Add(item);
+                a++;
+            }
+
+            items[2].Captions = "Có tất cả " + a + " trang được thêm vào. ";
         }
 
         void Crawl_couponscorpion() //https://couponscorpion.com/ - Đã hoàn thành
@@ -732,7 +752,7 @@ namespace Khai_thác_Udemy_free
 
         void Crawl_onlinecourses() //https://www.onlinecourses.ooo/
         {
-            
+
             //int page = 1020;
             //bool Next = true;
             //while (Next)
@@ -774,9 +794,9 @@ namespace Khai_thác_Udemy_free
             //        tbRes.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
             //        Next = false;
             //    }
-                
+
             //}
-            
+
         }
 
         void Crawl_dailycoursereviews()
@@ -790,7 +810,39 @@ namespace Khai_thác_Udemy_free
         }
 
         void Crawl_udemycouponlearnviral()
-        {            
+        {
+
+        }
+
+        void Crawl_ozbargain()
+        {
+            HttpRequest http = new HttpRequest();
+            string html = Get_html_in_link("https://www.ozbargain.com.au/deals/udemy.com", 500, http);
+
+            List<string> listpage = new List<string>();
+            Regex reg = new Regex(@"<div class=""node node-ozbdeal"" id=""node(?<Page>.*?)"">", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+            foreach (Match item in reg.Matches(html))
+            {
+                foreach (Capture i in item.Groups["Page"].Captures)
+                {
+                    HttpRequest http1 = new HttpRequest();
+                    string html2 = Get_html_in_link("https://www.ozbargain.com.au/node/" + i.ToString(), 500, http1);
+                    Regex reg1 = new Regex(@"^<li><a href=""(?<Link>.*?)"" class=""external inline"".*?</li>$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                    foreach (Match item1 in reg1.Matches(html2))
+                    {
+                        foreach (Capture i1 in item1.Groups["Link"].Captures)
+                        {
+                            listpage.Add(i1.ToString());
+                        }
+                    }
+                }
+            }
+            List<string> listpage_nodupcate= listpage.Distinct().ToList();
+            items[5].Captions = "Có tất cả " + listpage.Count + " trang được thêm vào.";
+            foreach (var item in listpage)
+            {
+                listlink.Add(item);
+            }
         }
 
         void Choose_Folder()
@@ -805,6 +857,7 @@ namespace Khai_thác_Udemy_free
 
         void Create_browser()
         {
+            #region Không cần thiết
             //var driverService = ChromeDriverService.CreateDefaultService();
             //driverService.HideCommandPromptWindow = true;
             //ChromeOptions option = new ChromeOptions();
@@ -813,10 +866,12 @@ namespace Khai_thác_Udemy_free
             //option.AddArguments("--disable-notifications");
             //tbPath.Dispatcher.Invoke(() => option.AddArgument(@"user-data-dir=" + tbPath.Text));
             //ChromeDriver chromeDriver = new ChromeDriver(driverService, option);
-            
+
             //chromeDriver.Navigate().GoToUrl(@"https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&service=mail&sacu=1&rip=1&flowName=GlifWebSignIn&flowEntry=ServiceLogin");
 
             //MessageBox.Show("Bạn vui lòng nhập địa chỉ đăng nhập của mình");
+            #endregion
+
         }
 
         void Runner() //Hàm dùng để chạy khi chương trình chạy
@@ -882,6 +937,7 @@ namespace Khai_thác_Udemy_free
             //tbRes.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
             //btRun.Dispatcher.Invoke(() => btRun.IsEnabled = true);
             #endregion
+            #region Setting tạo luồng
             Thread thr1 = new Thread(() =>
             {
                 int a = Count_in_realdiscount();
@@ -934,9 +990,23 @@ namespace Khai_thác_Udemy_free
             });
             Thread thr11 = new Thread(() =>
             {
-                int i = Count_in_tutorialbar();
-                items[13].Captions = "Có tất cả " + i + " trang";
+                int z = Count_in_tutorialbar();
+                items[13].Captions = "Có tất cả " + z + " trang";
             });
+            Thread thr12 = new Thread(() =>
+            {
+                Crawl_in_freecoupondiscount();
+            });
+            Thread thr13 = new Thread(() =>
+            {
+                Crawl_yofreesamples();
+            });
+            Thread thr14 = new Thread(() =>
+            {
+                Crawl_ozbargain();
+            });
+            #endregion
+            #region Thực thi chạy luồng
             thr1.Start();
             thr2.Start();
             thr3.Start();
@@ -948,6 +1018,10 @@ namespace Khai_thác_Udemy_free
             thr9.Start();
             thr10.Start();
             thr11.Start();
+            thr12.Start();
+            thr13.Start();
+            thr14.Start();
+            #endregion
         }
         #endregion
 
@@ -977,7 +1051,3 @@ namespace Khai_thác_Udemy_free
         #endregion        
     }
 }
-
-
-
-
