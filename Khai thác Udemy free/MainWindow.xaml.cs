@@ -1,6 +1,7 @@
 ﻿#region Khai báo thư viện
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -161,6 +162,14 @@ namespace Khai_thác_Udemy_free
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvUsers.ItemsSource);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("Page");
             view.GroupDescriptions.Add(groupDescription);
+
+
+            //StreamWriter stream = new StreamWriter("E:\\item.txt");  
+            //for (int i = 0; i < items.Count; i++)
+            //{
+            //    stream.WriteLine("[{0}]={1}",i,items[i].Page);
+            //}
+            //stream.Close();
             #endregion
         }
 
@@ -642,29 +651,17 @@ namespace Khai_thác_Udemy_free
 
         void Crawl_realdiscount(int from, int to) //Hàm chính dùng để crawler trang https://www.real.discount/  - Đã hoàn thành
         {
-            //bool Next = true;
-            //int x = 1;
-            //string html = "";
-            //while (Next)
-            //{
-            //    tbRes.Dispatcher.Invoke(() => tbRes.Text += "Đang thực hiện crawler trang " + x + " ở trang Link.Discount!\n");
-            //    Thread.Sleep(20);
-            //    tbRes.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
-            //    //Check_web_in_realdiscount(x, ref Next, ref html);
-            //    if (Next)
-            //    {
-            //        Regex reg = new Regex(@"www.udemy.com.*?\""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            //        foreach (Match item in reg.Matches(html))
-            //        {
-            //            listlink.Add(item.ToString().Replace(@"\", "").Replace("\"", ""));
-            //        }
-            //        x++;
-            //    }
-            //    else
-            //    {
-            //        break;
-            //    }
-            //}
+            for (int i = from; i <= to; i++)
+            {
+                xNetStandart.HttpRequest http = new xNetStandart.HttpRequest();
+                string html = Get_html_in_link("https://app.real.discount/free-courses/?page=" + i, 30000, http);        
+                Regex reg = new Regex(@"www.udemy.com.*?\""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
+                {
+                    listlink.Add(item.ToString().Replace(@"\", "").Replace("\"", ""));
+                }
+            }
+            
         }
 
         void Crawl_in_discudemy()
@@ -1005,6 +1002,11 @@ namespace Khai_thác_Udemy_free
             {
                 Crawl_ozbargain();
             });
+            Thread thr15 = new Thread(() =>
+            {
+                Crawl_realdiscount(1, 10);
+            });
+
             #endregion
             #region Thực thi chạy luồng
             thr1.Start();
@@ -1021,6 +1023,7 @@ namespace Khai_thác_Udemy_free
             thr12.Start();
             thr13.Start();
             thr14.Start();
+            thr15.Start();
             #endregion
         }
         #endregion
