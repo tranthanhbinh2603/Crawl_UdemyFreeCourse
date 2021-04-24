@@ -1,0 +1,3 @@
+﻿Đoạn regex cho https://comidoc.net/:
+- Đối với kết quả đầu tiên: remainingUses¨‡¨(.*?)¨¨(.*?)¨
+- Đối với các kết quả sau: Z¨»(.*?)¨(.*?)¨¨(.*?)¨\|{ßG¨

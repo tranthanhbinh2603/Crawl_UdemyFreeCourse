@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("text.txt")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("ghi%20ch%c3%ba.txt")]
 
 

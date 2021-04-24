@@ -1,7 +1,6 @@
 ﻿#region Khai báo thư viện
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -162,14 +161,6 @@ namespace Khai_thác_Udemy_free
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvUsers.ItemsSource);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("Page");
             view.GroupDescriptions.Add(groupDescription);
-
-
-            //StreamWriter stream = new StreamWriter("E:\\item.txt");  
-            //for (int i = 0; i < items.Count; i++)
-            //{
-            //    stream.WriteLine("[{0}]={1}",i,items[i].Page);
-            //}
-            //stream.Close();
             #endregion
         }
 
@@ -179,7 +170,7 @@ namespace Khai_thác_Udemy_free
             try
             {
                 xNetStandart.HttpRequest http = new xNetStandart.HttpRequest();
-                http.ConnectTimeout = 30000;
+                //http.ConnectTimeout = 30000;
                 string html = http.Get("https://app.real.discount/free-courses/").ToString();
                 string res = "";
                 Regex reg = new Regex(@"<span class=""text-right"">Total: (?<Page>.*?) offers</span>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
@@ -225,8 +216,6 @@ namespace Khai_thác_Udemy_free
             {
                 return Count_in_couponscorpion();
             }
-
-
         }
 
         int Count_in_onlinecourses() //https://www.onlinecourses.ooo/ - Đã hoàn thành
@@ -477,9 +466,42 @@ namespace Khai_thác_Udemy_free
             }
 
         }
+
+        int Count_in_coursevania() // https://coursevania.com/courses/# - Đã hoàn thành
+        {
+            HttpRequest http = new HttpRequest();
+            http.ConnectTimeout = 1700;
+            string html = http.Get("https://coursevania.com/wp-admin/admin-ajax.php?offset=1&template=courses%2Fgrid&sort=date_high&args=%7B%22image_d%22%3A%22img-480-380%22%2C%22per_row%22%3A%224%22%2C%22posts_per_page%22%3A%2212%22%2C%22class%22%3A%22archive_grid%22%7D&action=stm_lms_load_content&nonce=1b8d2ba248").ToString();
+            int kq = 0;
+            Regex reg = new Regex(@"""total"":.*?,""pages"":(?<Link>.*?)}", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+            foreach (Match item in reg.Matches(html))
+            {
+                foreach (Capture i in item.Groups["Link"].Captures)
+                {
+                    kq = int.Parse(i.ToString());
+                }
+            }
+            return kq;
+        }
+
+        int Count_in_smartybro() //https://smartybro.com/ - Đã hoàn thành
+        {
+            HttpRequest http = new HttpRequest();
+            string html = http.Get("https://smartybro.com/page/1/").ToString();
+            int kq = 0;
+            Regex reg = new Regex(@"<a\nclass=page-numbers href=https://smartybro.com/page/.*?/ >(?<Page>.*?)</a>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+            foreach (Match item in reg.Matches(html))
+            {
+                foreach (Capture i in item.Groups["Page"].Captures)
+                {
+                    kq = int.Parse(i.ToString());
+                }
+            }
+            return kq;
+        }
         #endregion
 
-        #region Hàm cần dùng
+        #region Hàm cần dùng - Tất cả các hàm phải được kiểm tra.
         bool Check_Udemy_Course_is_free(string Link) //Đã hoàn thiện
         {
             try
@@ -664,7 +686,7 @@ namespace Khai_thác_Udemy_free
             
         }
 
-        void Crawl_in_discudemy()
+        void Crawl_in_discudemy(int from, int to) //https://www.discudemy.com/all
         {
 
         }
@@ -939,6 +961,11 @@ namespace Khai_thác_Udemy_free
             {
                 int a = Count_in_realdiscount();
                 items[1].Captions = "Có tất cả " + a + " trang";
+                int pc = a / 5;
+                for (int i = 1; i <= 5; i++)
+                {
+                    Crawl_realdiscount(1, 10);
+                }
             });
             Thread thr2 = new Thread(() =>
             {
@@ -962,8 +989,16 @@ namespace Khai_thác_Udemy_free
             });
             Thread thr6 = new Thread(() =>
             {
-                int g = Count_in_discudemy();
-                items[8].Captions = "Có tất cả " + g + " trang";
+                //int g = Count_in_discudemy();
+                int g = 200;
+                int pc = g / 24;
+                int sd = g % 24;
+                pc += sd > 0 ? 1 : 0;
+                for (int i = 1; i <= 24; i++)
+                {
+                    int from = i == 1 ? 1 : (i - 1) * pc + 1;
+                    int to = i == 24 ? g : i * pc;
+                }
             });
             Thread thr7 = new Thread(() =>
             {
@@ -1004,9 +1039,8 @@ namespace Khai_thác_Udemy_free
             });
             Thread thr15 = new Thread(() =>
             {
-                Crawl_realdiscount(1, 10);
+                int kq = Count_in_coursevania();
             });
-
             #endregion
             #region Thực thi chạy luồng
             thr1.Start();
