@@ -499,6 +499,55 @@ namespace Khai_thác_Udemy_free
             }
             return kq;
         }
+
+        int Count_in_comidoc() //https://comidoc.net - Đã hoàn thành
+        {
+            HttpRequest http = new HttpRequest();
+            string html = WebUtility.HtmlDecode(http.Get("https://comidoc.net/coupons").ToString());
+
+            int kq = 0;
+            Regex reg = new Regex(@"""Go to page (?<Link>.*?)""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+            foreach (Match item in reg.Matches(html))
+            {
+                foreach (Capture i in item.Groups["Link"].Captures)
+                {
+                    kq = int.Parse(i.ToString());
+                }
+            }
+            return kq;
+        }
+
+        int Count_in_freecoursesforall()
+        {
+            HttpRequest http = new HttpRequest();
+            string html = WebUtility.HtmlDecode(http.Get("https://freecoursesforall.com/dealstore/udemy/").ToString());
+            int kq = 0;
+            Regex reg = new Regex(@"<li><a href=""https://freecoursesforall.com/dealstore/udemy/page/(?<Page>.*?)/"">.*?</a></li>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+            foreach (Match item in reg.Matches(html))
+            {
+                foreach (Capture i in item.Groups["Page"].Captures)
+                {
+                    kq = int.Parse(i.ToString());
+                }
+            }
+            return kq;
+        } //https://freecoursesforall.com/ - Đã hoàn thành
+
+        int Count_in_anycouponcode()
+        {
+            HttpRequest http = new HttpRequest();
+            string html = WebUtility.HtmlDecode(http.Get("http://www.anycouponcode.net/category/online-course/udemy/").ToString());
+            int kq = 0;
+            Regex reg = new Regex(@"<a class=""page-numbers"" href=""http://www.anycouponcode.net/category/online-course/udemy/page/(?<Page>.*?)/"">.*?</a>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+            foreach (Match item in reg.Matches(html))
+            {
+                foreach (Capture i in item.Groups["Page"].Captures)
+                {
+                    kq = int.Parse(i.ToString());
+                }
+            }
+            return kq;
+        }
         #endregion
 
         #region Hàm cần dùng - Tất cả các hàm phải được kiểm tra.
