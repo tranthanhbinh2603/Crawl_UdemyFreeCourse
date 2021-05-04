@@ -110,7 +110,11 @@ namespace Khai_thác_Udemy_free
             items.Add(new Trangthai() { ThreadName = "udemycouponsme", Captions = "", Page = Page.TongKet });
             items.Add(new Trangthai() { ThreadName = "Sitepoint", Captions = "", Page = Page.TongKet });
             items.Add(new Trangthai() { ThreadName = "Coursejoiner", Captions = "", Page = Page.TongKet });
-            items.Add(new Trangthai() { ThreadName = "Tutorialbar", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "Tutorialbar", Captions = "", Page = Page.TongKet }); 
+            items.Add(new Trangthai() { ThreadName = "Smartybro", Captions = "", Page = Page.TongKet }); 
+            items.Add(new Trangthai() { ThreadName = "Comidoc", Captions = "", Page = Page.TongKet }); 
+            items.Add(new Trangthai() { ThreadName = "Freecoursesforall", Captions = "", Page = Page.TongKet });
+            items.Add(new Trangthai() { ThreadName = "Anycouponcode", Captions = "", Page = Page.TongKet });
             for (int i = 1; i <= 5; i++)
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.RealDiscount });
@@ -365,22 +369,21 @@ namespace Khai_thác_Udemy_free
         {
             try
             {
-                HttpRequest http = new HttpRequest();
+                xNetStandart.HttpRequest http = new xNetStandart.HttpRequest();
                 http.ConnectTimeout = 3000;
                 string html = http.Get("https://udemycoupons.me/freeudemycourse/").ToString();
                 int res = 0;
-
-                Regex reg = new Regex(@"<a href=""https://udemycoupons.me/freeudemycourse/page/(?<Link>.*?)/"" class="".*?"" title="".*?"">", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                Regex reg = new Regex(@"<a href=""https://udemycoupons.me/freecourse/page/.*?/"" class=""last"" title="".*?"">(?<Link>.*?)</a>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
                 foreach (Match item in reg.Matches(html))
                 {
                     foreach (Capture i in item.Groups["Link"].Captures)
                     {
                         res = int.Parse(i.ToString());
                     }
-                }
+                }                
                 return res;
             }
-            catch (xNet.HttpException)
+            catch (xNetStandart.HttpException)
             {
                 return Count_in_udemycouponsme();
             }
@@ -464,24 +467,6 @@ namespace Khai_thác_Udemy_free
             {
                 return Count_in_coursejoiner();
             }
-
-        }
-
-        int Count_in_coursevania() // https://coursevania.com/courses/# - Đã hoàn thành
-        {
-            HttpRequest http = new HttpRequest();
-            http.ConnectTimeout = 1700;
-            string html = http.Get("https://coursevania.com/wp-admin/admin-ajax.php?offset=1&template=courses%2Fgrid&sort=date_high&args=%7B%22image_d%22%3A%22img-480-380%22%2C%22per_row%22%3A%224%22%2C%22posts_per_page%22%3A%2212%22%2C%22class%22%3A%22archive_grid%22%7D&action=stm_lms_load_content&nonce=1b8d2ba248").ToString();
-            int kq = 0;
-            Regex reg = new Regex(@"""total"":.*?,""pages"":(?<Link>.*?)}", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            foreach (Match item in reg.Matches(html))
-            {
-                foreach (Capture i in item.Groups["Link"].Captures)
-                {
-                    kq = int.Parse(i.ToString());
-                }
-            }
-            return kq;
         }
 
         int Count_in_smartybro() //https://smartybro.com/ - Đã hoàn thành
@@ -1010,11 +995,6 @@ namespace Khai_thác_Udemy_free
             {
                 int a = Count_in_realdiscount();
                 items[1].Captions = "Có tất cả " + a + " trang";
-                int pc = a / 5;
-                for (int i = 1; i <= 5; i++)
-                {
-                    Crawl_realdiscount(1, 10);
-                }
             });
             Thread thr2 = new Thread(() =>
             {
@@ -1038,16 +1018,8 @@ namespace Khai_thác_Udemy_free
             });
             Thread thr6 = new Thread(() =>
             {
-                //int g = Count_in_discudemy();
-                int g = 200;
-                int pc = g / 24;
-                int sd = g % 24;
-                pc += sd > 0 ? 1 : 0;
-                for (int i = 1; i <= 24; i++)
-                {
-                    int from = i == 1 ? 1 : (i - 1) * pc + 1;
-                    int to = i == 24 ? g : i * pc;
-                }
+                int g = Count_in_discudemy();
+                items[8].Captions = "Có tất cả " + g + " trang";
             });
             Thread thr7 = new Thread(() =>
             {
@@ -1088,7 +1060,23 @@ namespace Khai_thác_Udemy_free
             });
             Thread thr15 = new Thread(() =>
             {
-                int kq = Count_in_coursevania();
+                int kq = Count_in_smartybro();
+                items[14].Captions = "Có tất cả " + kq + " trang";
+            });
+            Thread thr16 = new Thread(() =>
+            {
+                int kq = Count_in_comidoc();
+                items[15].Captions = "Có tất cả " + kq + " trang";
+            });
+            Thread thr17 = new Thread(() =>
+            {
+                int kq = Count_in_freecoursesforall();
+                items[16].Captions = "Có tất cả " + kq + " trang";
+            });
+            Thread thr18 = new Thread(() =>
+            {
+                int kq = Count_in_anycouponcode();
+                items[17].Captions = "Có tất cả " + kq + " trang";
             });
             #endregion
             #region Thực thi chạy luồng
@@ -1107,6 +1095,9 @@ namespace Khai_thác_Udemy_free
             thr13.Start();
             thr14.Start();
             thr15.Start();
+            thr16.Start();
+            thr17.Start();
+            thr18.Start();
             #endregion
         }
         #endregion

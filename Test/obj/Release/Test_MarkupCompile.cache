@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-D:\Data\Project\Crawl_UdemyFreeCourse\Test\obj\Debug\
+D:\Data\Project\Crawl_UdemyFreeCourse\Test\obj\Release\
 Test
 none
 false
-DEBUG;TRACE
+TRACE
 D:\Data\Project\Crawl_UdemyFreeCourse\Test\App.xaml
 11151548125
 

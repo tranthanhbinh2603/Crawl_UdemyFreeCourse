@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\Data\Project\Crawl_UdemyFreeCourse\Test crawl\obj\Debug\
+D:\Data\Project\Crawl_UdemyFreeCourse\Test crawl\obj\Release\
 Test_crawl
 none
 false
-DEBUG;TRACE
+TRACE
 D:\Data\Project\Crawl_UdemyFreeCourse\Test crawl\App.xaml
 11151548125
 
 5-2017746502
-161955713394
+141166210517
 MainWindow.xaml;
 
 True

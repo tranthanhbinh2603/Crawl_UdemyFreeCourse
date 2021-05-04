@@ -49,3 +49,29 @@ E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCou
 E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\xNet.dll
 E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\xNetStandart.dll
 E:\Document\Visual Studio 2015\Projects\Khai thác Udemy Free\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\xNetStandart.pdb
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\Khai thác Udemy free.exe.config
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\Khai thác Udemy free.exe
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\Khai thác Udemy free.pdb
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\Leaf.xNet.dll
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\Microsoft.WindowsAPICodePack.dll
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\Microsoft.WindowsAPICodePack.Sensors.dll
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\Microsoft.WindowsAPICodePack.ShellExtensions.dll
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\WebDriver.dll
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\Leaf.xNet.xml
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\WebDriver.xml
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\bin\Debug\xNetStandart.pdb
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai thác Udemy free.csprojAssemblyReference.cache
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\MainWindow.g.cs
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\App.g.cs
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai thác Udemy free_MarkupCompile.cache
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai thác Udemy free_MarkupCompile.lref
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\MainWindow.baml
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai thác Udemy free.g.resources
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai_thác_Udemy_free.Properties.Resources.resources
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai thác Udemy free.csproj.GenerateResource.cache
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai thác Udemy free.csproj.CoreCompileInputs.cache
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai thác Udemy free.csproj.CopyComplete
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai thác Udemy free.exe
+D:\Data\Project\Crawl_UdemyFreeCourse\Khai thác Udemy free\obj\Debug\Khai thác Udemy free.pdb
