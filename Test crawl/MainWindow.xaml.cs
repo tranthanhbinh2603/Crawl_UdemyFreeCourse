@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using xNet;
 
 namespace Test_crawl
 {
@@ -31,15 +18,24 @@ namespace Test_crawl
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            HttpRequest http = new HttpRequest();
-            string html = WebUtility.HtmlDecode(http.Get("http://www.anycouponcode.net/category/online-course/udemy/").ToString());
-            int kq = 0;
-            Regex reg = new Regex(@"<a class=""page-numbers"" href=""http://www.anycouponcode.net/category/online-course/udemy/page/(?<Page>.*?)/"">.*?</a>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+            xNetStandart.HttpRequest http = new xNetStandart.HttpRequest();
+            string html = WebUtility.HtmlDecode(http.Get("https://app.real.discount/filter/?category=All&store=Udemy&duration=All&price=0&rating=All&language=All&search=&submit=Filter&page=" + 1).ToString());
+            Regex reg = new Regex(@"<a href=""/offer/(?<Link_parent>.*?)"">");
             foreach (Match item in reg.Matches(html))
             {
-                foreach (Capture i in item.Groups["Page"].Captures)
+                foreach (Capture i in item.Groups["Link_parent"].Captures)
                 {
-                    kq = int.Parse(i.ToString());
+                    xNetStandart.HttpRequest http1 = new xNetStandart.HttpRequest();
+                    string html1 = WebUtility.HtmlDecode(http1.Get("https://app.real.discount/offer/" + i.ToString()).ToString());
+
+                    Regex reg1 = new Regex(@"<a href=""(?<Link>https://www.udemy.com/course/.*?)"" target=""_blank"" >");
+                    foreach (Match item1 in reg1.Matches(html1))
+                    {
+                        foreach (Capture i1 in item1.Groups["Link"].Captures)
+                        {
+                            tbKQ.Text += i1.ToString() + "\n";
+                        }
+                    }
                 }
             }
         }

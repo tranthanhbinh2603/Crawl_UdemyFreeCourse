@@ -1,0 +1,13 @@
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\bin\Debug\netcoreapp3.1\Chia phần.exe
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\bin\Debug\netcoreapp3.1\Chia phần.deps.json
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\bin\Debug\netcoreapp3.1\Chia phần.runtimeconfig.json
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\bin\Debug\netcoreapp3.1\Chia phần.runtimeconfig.dev.json
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\bin\Debug\netcoreapp3.1\Chia phần.dll
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\bin\Debug\netcoreapp3.1\Chia phần.pdb
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\obj\Debug\netcoreapp3.1\Chia phần.csprojAssemblyReference.cache
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\obj\Debug\netcoreapp3.1\Chia phần.AssemblyInfoInputs.cache
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\obj\Debug\netcoreapp3.1\Chia phần.AssemblyInfo.cs
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\obj\Debug\netcoreapp3.1\Chia phần.csproj.CoreCompileInputs.cache
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\obj\Debug\netcoreapp3.1\Chia phần.dll
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\obj\Debug\netcoreapp3.1\Chia phần.pdb
+D:\Data\Project\Crawl_UdemyFreeCourse\Chia phần\obj\Debug\netcoreapp3.1\Chia phần.genruntimeconfig.cache
