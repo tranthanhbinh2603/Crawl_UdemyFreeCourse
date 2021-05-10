@@ -138,11 +138,11 @@ namespace Khai_thác_Udemy_free
             items.Add(new Trangthai() { ThreadName = "Comidoc", Captions = "", Page = Page.TongKet }); 
             items.Add(new Trangthai() { ThreadName = "Freecoursesforall", Captions = "", Page = Page.TongKet });
             items.Add(new Trangthai() { ThreadName = "Anycouponcode", Captions = "", Page = Page.TongKet });
-            for (int i = 1; i <= 5; i++)
+            for (int i = 1; i <= 7; i++)
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.RealDiscount });
             }
-            for (int i = 1; i <= 25; i++)
+            for (int i = 1; i <= 8; i++)
             {
                 items.Add(new Trangthai() { ThreadName = "Thread " + i, Captions = "", Page = Page.CouponScorpion });
             }
@@ -198,7 +198,7 @@ namespace Khai_thác_Udemy_free
             {
                 xNetStandart.HttpRequest http = new xNetStandart.HttpRequest();
                 //http.ConnectTimeout = 30000;
-                string html = http.Get("https://app.real.discount/free-courses/").ToString();
+                string html = http.Get("https://app.real.discount/filter/?category=All&store=Udemy&duration=All&price=0&rating=All&language=All&search=&submit=Filter&page=1").ToString();
                 string res = "";
                 Regex reg = new Regex(@"<span class=""text-right"">Total: (?<Page>.*?) offers</span>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
                 foreach (Match item in reg.Matches(html))
@@ -223,7 +223,7 @@ namespace Khai_thác_Udemy_free
             {
                 HttpRequest http = new HttpRequest();
                 http.ConnectTimeout = 2000;
-                string html = http.Get("https://couponscorpion.com/").ToString();
+                string html = http.Get("https://couponscorpion.com/category/100-off-coupons/").ToString();
                 int res = 0;
 
                 Regex reg = new Regex(@"<ul class=""page-numbers"">.*?</ul>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
@@ -486,7 +486,7 @@ namespace Khai_thác_Udemy_free
                 }
                 return res;
             }
-            catch (xNet.HttpException)
+            catch (HttpException)
             {
                 return Count_in_coursejoiner();
             }
@@ -494,67 +494,101 @@ namespace Khai_thác_Udemy_free
 
         int Count_in_smartybro() //https://smartybro.com/ - Đã hoàn thành
         {
-            HttpRequest http = new HttpRequest();
-            string html = http.Get("https://smartybro.com/page/1/").ToString();
-            int kq = 0;
-            Regex reg = new Regex(@"<a\nclass=page-numbers href=https://smartybro.com/page/.*?/ >(?<Page>.*?)</a>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            foreach (Match item in reg.Matches(html))
+            try
             {
-                foreach (Capture i in item.Groups["Page"].Captures)
+                HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = 2000;
+                string html = http.Get("https://smartybro.com/page/1/").ToString();
+                int kq = 0;
+                Regex reg = new Regex(@"<a\nclass=page-numbers href=https://smartybro.com/page/.*?/ >(?<Page>.*?)</a>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
                 {
-                    kq = int.Parse(i.ToString());
+                    foreach (Capture i in item.Groups["Page"].Captures)
+                    {
+                        kq = int.Parse(i.ToString());
+                    }
                 }
+                return kq;
             }
-            return kq;
+            catch (HttpException)
+            {
+                return Count_in_smartybro();
+            }
+            
         }
 
         int Count_in_comidoc() //https://comidoc.net - Đã hoàn thành
         {
-            HttpRequest http = new HttpRequest();
-            string html = WebUtility.HtmlDecode(http.Get("https://comidoc.net/coupons").ToString());
-
-            int kq = 0;
-            Regex reg = new Regex(@"""Go to page (?<Link>.*?)""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            foreach (Match item in reg.Matches(html))
+            try
             {
-                foreach (Capture i in item.Groups["Link"].Captures)
+                HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = 1700;
+                string html = WebUtility.HtmlDecode(http.Get("https://comidoc.net/coupons").ToString());
+                int kq = 0;
+                Regex reg = new Regex(@"""Go to page (?<Link>.*?)""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
                 {
-                    kq = int.Parse(i.ToString());
+                    foreach (Capture i in item.Groups["Link"].Captures)
+                    {
+                        kq = int.Parse(i.ToString());
+                    }
                 }
+                return kq;
             }
-            return kq;
+            catch (HttpException)
+            {
+                return Count_in_comidoc();
+            }
+            
         }
 
-        int Count_in_freecoursesforall()
+        int Count_in_freecoursesforall()//https://freecoursesforall.com/ - Đã hoàn thành
         {
-            HttpRequest http = new HttpRequest();
-            string html = WebUtility.HtmlDecode(http.Get("https://freecoursesforall.com/dealstore/udemy/").ToString());
-            int kq = 0;
-            Regex reg = new Regex(@"<li><a href=""https://freecoursesforall.com/dealstore/udemy/page/(?<Page>.*?)/"">.*?</a></li>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            foreach (Match item in reg.Matches(html))
+            try
             {
-                foreach (Capture i in item.Groups["Page"].Captures)
+                HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = 1400;
+                string html = WebUtility.HtmlDecode(http.Get("https://freecoursesforall.com/dealstore/udemy/").ToString());
+                int kq = 0;
+                Regex reg = new Regex(@"<li><a href=""https://freecoursesforall.com/dealstore/udemy/page/(?<Page>.*?)/"">.*?</a></li>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
                 {
-                    kq = int.Parse(i.ToString());
+                    foreach (Capture i in item.Groups["Page"].Captures)
+                    {
+                        kq = int.Parse(i.ToString());
+                    }
                 }
+                return kq;
             }
-            return kq;
-        } //https://freecoursesforall.com/ - Đã hoàn thành
+            catch (HttpException)
+            {
+                return Count_in_freecoursesforall();
+            }
+            
+        } 
 
         int Count_in_anycouponcode()
         {
-            HttpRequest http = new HttpRequest();
-            string html = WebUtility.HtmlDecode(http.Get("http://www.anycouponcode.net/category/online-course/udemy/").ToString());
-            int kq = 0;
-            Regex reg = new Regex(@"<a class=""page-numbers"" href=""http://www.anycouponcode.net/category/online-course/udemy/page/(?<Page>.*?)/"">.*?</a>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            foreach (Match item in reg.Matches(html))
+            try
             {
-                foreach (Capture i in item.Groups["Page"].Captures)
+                HttpRequest http = new HttpRequest();
+                http.ConnectTimeout = 1000;
+                string html = WebUtility.HtmlDecode(http.Get("http://www.anycouponcode.net/category/online-course/udemy/").ToString());
+                int kq = 0;
+                Regex reg = new Regex(@"<a class=""page-numbers"" href=""http://www.anycouponcode.net/category/online-course/udemy/page/(?<Page>.*?)/"">.*?</a>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                foreach (Match item in reg.Matches(html))
                 {
-                    kq = int.Parse(i.ToString());
+                    foreach (Capture i in item.Groups["Page"].Captures)
+                    {
+                        kq = int.Parse(i.ToString());
+                    }
                 }
+                return kq;
             }
-            return kq;
+            catch (HttpException)
+            {
+                return Count_in_anycouponcode();    
+            }
         }
         #endregion
 
@@ -730,16 +764,46 @@ namespace Khai_thác_Udemy_free
             }
         }
 
-        void Crawl_realdiscount(int so_trang, int cs) //Hàm chính dùng để crawler trang https://www.real.discount/  - Đã hoàn thành
+        void Crawl_realdiscount(int from, int to, int cs) //Hàm chính dùng để crawler trang https://www.real.discount/  - Đã hoàn thành
         {
-            items[cs].Captions = "Đang quét trang thứ " + so_trang;
-            xNetStandart.HttpRequest http = new xNetStandart.HttpRequest();
-            string html = Get_html_in_link("https://app.real.discount/filter/?category=All&store=Udemy&duration=All&price=0&rating=All&language=All&search=&submit=Filter&page=" + so_trang, 2000, http);        
-            Regex reg = new Regex(@"www.udemy.com.*?\""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            foreach (Match item in reg.Matches(html))
+            int k = 0;
+            try
             {
-                listlink.Add(item.ToString().Replace(@"\", "").Replace("\"", ""));
-            }           
+                for (k = from; k < to; k++)
+                {
+                    items[cs].Captions = "Đang quét trang thứ " + k;
+                    xNetStandart.HttpRequest http = new xNetStandart.HttpRequest();
+                    http.ConnectTimeout = 4000;
+                    string html = WebUtility.HtmlDecode(http.Get("https://app.real.discount/filter/?category=All&store=Udemy&duration=All&price=0&rating=All&language=All&search=&submit=Filter&page=" + k).ToString());
+                    Regex reg = new Regex(@"<a href=""/offer/(?<Link_parent>.*?)"">");
+                    foreach (Match item in reg.Matches(html))
+                    {
+                        foreach (Capture i in item.Groups["Link_parent"].Captures)
+                        {
+                            xNetStandart.HttpRequest http1 = new xNetStandart.HttpRequest();
+                            http1.ConnectTimeout = 4000;
+                            http1.AddHeader((xNetStandart.HttpHeader)HttpHeader.UserAgent, Http.ChromeUserAgent());
+                            string html1 = WebUtility.HtmlDecode(http1.Get("https://app.real.discount/offer/" + i.ToString()).ToString());
+
+                            Regex reg1 = new Regex(@"<a href="".*?(?<Link>https://www.udemy.com/course/.*?)"" target=""_blank"" >");
+                            foreach (Match item1 in reg1.Matches(html1))
+                            {
+                                foreach (Capture i1 in item1.Groups["Link"].Captures)
+                                {
+                                    listlink.Add(i1.ToString());
+                                    items[cs].Captions = "Đã thêm trang " + i1.ToString() + " thuộc trang " + k + " vào danh sách chờ.";
+                                }
+                                Thread.Sleep(200);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (xNetStandart.HttpException)
+            {
+                Crawl_realdiscount(k, to, cs);
+            }
+            
         }
 
         void Crawl_in_discudemy(int from, int to) //https://www.discudemy.com/all
@@ -773,56 +837,51 @@ namespace Khai_thác_Udemy_free
             items[2].Captions = "Có tất cả " + a + " trang được thêm vào. ";
         }
 
-        void Crawl_couponscorpion() //https://couponscorpion.com/ - Đã hoàn thành
+        void Crawl_couponscorpion(int from, int to, int cs) //https://couponscorpion.com/ - Đã hoàn thành
         {
-            //bool Next = true;
-            //int Page = 1;
-            //while (Next)
-            //{
-            //    tbRes.Dispatcher.Invoke(() => tbRes.Text += "Đang check trang thứ " + Page + "\n");
-            //    pnNeo.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
+            int k = 0;
+            try
+            {
+                for (k = from; k < to; k++)
+                {
+                    items[cs].Captions = "Đang crawler trang thứ " + k;
+                    HttpRequest http = new HttpRequest();
+                    http.ConnectTimeout = 3500;
+                    string html = http.Get("https://couponscorpion.com/category/100-off-coupons/page/" + k + "/").ToString();
+                    Regex reg = new Regex(@"<div class=""news-community category_udemy-coupon-code-2021 category_udemy .*?</div>.*?<a href=""(?<Link>.*?)"" target=""_blank"">", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                    foreach (Match item in reg.Matches(html))
+                    {
+                        foreach (Capture i in item.Groups["Link"].Captures)
+                        {
+                            HttpRequest http2 = new xNet.HttpRequest();
+                            http2.ConnectTimeout = 1500;
+                            string html_get_udemy = http2.Get(i.ToString()).ToString();
 
-            //    HttpRequest http = new HttpRequest();
-            //    string html = http.Get("https://couponscorpion.com/page/" + Page).ToString();
-            //    Regex reg = new Regex(@"<article class=""col_item.*?</article>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            //    if (reg.Matches(html).Count > 0)
-            //    {
-            //        foreach (Match item in reg.Matches(html))
-            //        {
-            //            Regex reg_get_link = new Regex(@"<a href=""(?<Link>.*?)""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            //            foreach (Match item_link in reg_get_link.Matches(item.ToString()))
-            //            {
-            //                foreach (Capture i in item_link.Groups["Link"].Captures)
-            //                {
-            //                    if ((i.ToString().Contains("category") == false) && (i.ToString() != ""))
-            //                    {
-            //                        xNet.HttpRequest http2 = new xNet.HttpRequest();
-            //                        string html_get_udemy = http2.Get(i.ToString()).ToString();
-
-            //                        Regex reg_udemy = new Regex(@"var sf_offer_url = '(?<Link>.*?)';", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-            //                        foreach (Match item_udemy in reg_udemy.Matches(html_get_udemy))
-            //                        {
-            //                            foreach (Capture i_udemy in item_udemy.Groups["Link"].Captures)
-            //                            {
-            //                                HttpRequest http3 = new HttpRequest();
-            //                                System.Uri html_res = http3.Get("https://couponscorpion.com/scripts/udemy/out.php?go="+i_udemy.ToString()).Address;
-            //                                tbRes.Dispatcher.Invoke(() => tbRes.Text += "Đang thêm trang: " + html_res + "\n");
-            //                                pnNeo.Dispatcher.Invoke(() => tbRes.ScrollToEnd());
-            //                            }
-            //                        }
-            //                    }
-
-            //                }
-            //            }
-            //        }
-            //        Page++;
-            //    }
-            //    else
-            //    {
-            //        tbRes.Dispatcher.Invoke(() => tbRes.Text += "Không có link! Kết thúc quét!\n");
-            //        Next = false;
-            //    }
-            //}
+                            Regex reg_udemy = new Regex(@"var sf_offer_url = '(?<Link>.*?)';", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                            foreach (Match item_udemy in reg_udemy.Matches(html_get_udemy))
+                            {
+                                foreach (Capture i_udemy in item_udemy.Groups["Link"].Captures)
+                                {
+                                    xNetStandart.HttpRequest http3 = new xNetStandart.HttpRequest();
+                                    http3.ConnectTimeout = 4000;
+                                    System.Uri html_res = http3.Get("https://couponscorpion.com/scripts/udemy/out.php?go=" + i_udemy.ToString()).Address;
+                                    items[cs].Captions = "Đã thêm trang " + html_res + " vào danh sách chờ";
+                                    Thread.Sleep(200);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (HttpException)
+            {
+                Crawl_couponscorpion(k, to, cs);
+            }
+            catch (xNetStandart.HttpException)
+            {
+                Crawl_couponscorpion(k, to, cs);
+            }
+            
         }
 
         void Crawl_onlinecourses() //https://www.onlinecourses.ooo/
@@ -1016,32 +1075,30 @@ namespace Khai_thác_Udemy_free
             Thread thr1 = new Thread(() =>
             {
                 int a = Count_in_realdiscount();
-                int sophan = 5;
-                int[] pc = new int[100];
+                items[1].Captions = "Có tất cả " + a + " trang";
+                int sophan = 7;
+                int[] pc = new int[sophan];
                 Chiaphan(a, sophan, ref pc);
-                for (int i = 1; i < sophan; i++)
+                for (int i = 1; i <= sophan; i++)
                 {
-                    if (i==1)
+                    if (i == 1)
                     {
-                        for (int z = 1; i < pc[i - 1]; i++)
+                        Thread thr = new Thread(() =>
                         {
-                            Thread thr = new Thread(() =>
-                            {
-                                Crawl_realdiscount(z, 17 + i);
-                            });
-                            thr.Start();
-                        }   
+                            Crawl_realdiscount(1, pc[i - 1], 17 + i);
+                        });
+                        thr.Start();
+                        Thread.Sleep(1000);
                     }
                     else
                     {
-                        for (int z = pc[i - 2]; i < pc[i - 1]; i++)
+                        Thread thr = new Thread(() =>
                         {
-                            Thread thr = new Thread(() =>
-                            {
-                                Crawl_realdiscount(z, 17 + i);
-                            });
-                            thr.Start();
-                        }             
+                            Crawl_realdiscount(pc[i - 2], pc[i - 1], 17 + i);
+                        });
+                        thr.Start();
+                        Thread.Sleep(1000);
+
                     }
                 }
             });
@@ -1049,6 +1106,31 @@ namespace Khai_thác_Udemy_free
             {
                 int b = Count_in_couponscorpion();
                 items[3].Captions = "Có tất cả " + b + " trang";
+                int soluong = 8;
+                int[] pc = new int[soluong];
+                Chiaphan(b, soluong, ref pc);
+                for (int i = 1; i <= soluong; i++)
+                {
+                    if (i == 1)
+                    {
+                        Thread thr = new Thread(() =>
+                        {
+                            Crawl_couponscorpion(1, pc[i - 1], 24 + i);
+                        });
+                        thr.Start();
+                        Thread.Sleep(1000);
+                    }
+                    else
+                    {
+                        Thread thr = new Thread(() =>
+                        {
+                            Crawl_couponscorpion(pc[i - 2], pc[i - 1], 24 + i);
+                        });
+                        thr.Start();
+                        Thread.Sleep(1000);
+
+                    }
+                }
             });
             Thread thr3 = new Thread(() =>
             {
@@ -1127,6 +1209,17 @@ namespace Khai_thác_Udemy_free
                 int kq = Count_in_anycouponcode();
                 items[17].Captions = "Có tất cả " + kq + " trang";
             });
+            //Thread thrinluong = new Thread(() =>
+            //{
+            //    int cs = 0;
+            //    StreamWriter stream = new StreamWriter(@"D:\test.txt");
+            //    foreach (var item in items)
+            //    {
+            //        stream.WriteLine("{0}: {1}", cs, item.Page);
+            //        cs++;
+            //    }                
+            //    stream.Close();
+            //});
             #endregion
             #region Thực thi chạy luồng
             thr1.Start();
@@ -1147,6 +1240,7 @@ namespace Khai_thác_Udemy_free
             thr16.Start();
             thr17.Start();
             thr18.Start();
+            //thrinluong.Start();
             #endregion
         }
         #endregion

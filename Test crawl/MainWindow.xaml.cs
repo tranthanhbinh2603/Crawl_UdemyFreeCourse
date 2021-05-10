@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
+using xNet;
 
 namespace Test_crawl
 {
@@ -18,26 +19,34 @@ namespace Test_crawl
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            xNetStandart.HttpRequest http = new xNetStandart.HttpRequest();
-            string html = WebUtility.HtmlDecode(http.Get("https://app.real.discount/filter/?category=All&store=Udemy&duration=All&price=0&rating=All&language=All&search=&submit=Filter&page=" + 1).ToString());
-            Regex reg = new Regex(@"<a href=""/offer/(?<Link_parent>.*?)"">");
+            int k = 1;
+            HttpRequest http = new HttpRequest();
+            http.ConnectTimeout = 3500;
+            string html = http.Get("https://couponscorpion.com/category/100-off-coupons/page/" + k + "/").ToString();
+            Regex reg = new Regex(@"<div class=""news-community category_udemy-coupon-code-2021 category_udemy .*?</div>.*?<a href=""(?<Link>.*?)"" target=""_blank"">", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
             foreach (Match item in reg.Matches(html))
             {
-                foreach (Capture i in item.Groups["Link_parent"].Captures)
+                foreach (Capture i in item.Groups["Link"].Captures)
                 {
-                    xNetStandart.HttpRequest http1 = new xNetStandart.HttpRequest();
-                    string html1 = WebUtility.HtmlDecode(http1.Get("https://app.real.discount/offer/" + i.ToString()).ToString());
+                    HttpRequest http2 = new xNet.HttpRequest();
+                    http2.ConnectTimeout = 1500;
+                    string html_get_udemy = http2.Get(i.ToString()).ToString();
 
-                    Regex reg1 = new Regex(@"<a href=""(?<Link>https://www.udemy.com/course/.*?)"" target=""_blank"" >");
-                    foreach (Match item1 in reg1.Matches(html1))
+                    Regex reg_udemy = new Regex(@"var sf_offer_url = '(?<Link>.*?)';", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                    foreach (Match item_udemy in reg_udemy.Matches(html_get_udemy))
                     {
-                        foreach (Capture i1 in item1.Groups["Link"].Captures)
+                        foreach (Capture i_udemy in item_udemy.Groups["Link"].Captures)
                         {
-                            tbKQ.Text += i1.ToString() + "\n";
+                            xNetStandart.HttpRequest http3 = new xNetStandart.HttpRequest();
+                            http3.ConnectTimeout = 4000;
+                            System.Uri html_res = http3.Get("https://couponscorpion.com/scripts/udemy/out.php?go=" + i_udemy.ToString()).Address;
                         }
                     }
                 }
             }
+            //HttpRequest http = new HttpRequest();
+            //http.ConnectTimeout = 3500;
+            //string html = http.Get("https://couponscorpion.com/teaching-academics/master-work-time-for-gmat-gre-cat-competitive-exam/").ToString();
         }
     }
 }

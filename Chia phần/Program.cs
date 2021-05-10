@@ -34,8 +34,8 @@ namespace Chia_phần
             {
                 kq[i] = 0;
             }
-            Chiaphan(n, 5, ref kq);
-            for (int i = 1; i <= 5; i++)
+            Chiaphan(n, 7, ref kq);
+            for (int i = 1; i <= 7; i++)
             {
                 if (i == 1)
                 {
